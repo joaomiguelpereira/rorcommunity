@@ -1,7 +1,0 @@
-{"	hash{:intended_action"
-index:	user0:user_logged_in0:
-email0:user_recordo:	User:@attributes{"password_salt"oR43IdB4"id"29"password_hash"Ef466ea9eda3c42ed6aa4068869043a10a167fc63cc10d90ca21a4f7cdc25217f"screen_name"joao2c"first_name"João Miguel Rodrigues ppp"last_name"Pereira"
-email"joaomrpereira@hotmail.com"
-flashIC:'ActionController::Flash::FlashHash{:notice" User Name/Password Invalid :
-@used{;T:intended_controller"
-admin
