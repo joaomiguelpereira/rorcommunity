@@ -1,0 +1,5 @@
+page.alert("initializing");
+
+
+
+#page.replace_html("email_list_container","teste")

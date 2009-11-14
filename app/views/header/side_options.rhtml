@@ -1,0 +1,34 @@
+<div class="side-header">
+    <%unless session[:logged_user]%>
+        <span id="register_top_link">
+        <%= link_to BaseHelper.get_message("user.join"), register_url%>
+        
+        </span>
+    <%else%>
+        <span class="top_user_option">
+        <%screen_name= User.get_user_name(session[:logged_user])%>
+        Ol&aacute; <%=screen_name%> | 
+        
+        	<span>
+	           <a href="<%=user_url(:user_screen_name=>screen_name)%>">O meu Perfil</a> |
+	      </span>
+
+        </span>
+    <%end%>
+    
+	<span id="login_top_form_link">
+	<%=
+	
+	   link_to_show_top_login_form
+	
+	%>
+	  
+	</span>
+	
+	<form action="/search" method="get" id="search" onsubmit="topsearch()">
+	 
+		<input type="text" name="s" id="top-keywords" value="Procurar" />
+		<input type="image" id="top-submit" src="/images/search.gif" alt="Submit" />
+	</form>
+	asdjl	
+</div><!--End side options-->

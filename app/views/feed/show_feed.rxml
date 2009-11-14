@@ -1,0 +1,24 @@
+xml.instruct!
+xml.rss "version" => "2.0" , "xmlns:dc" => "http://purl.org/dc/elements/1.1/" do
+  xml.channel do
+    xml.title "fav.otitus.com. disto q'interessa o que interessa"
+    xml.link home_url()
+    if @posts.first.nil?
+      xml.pubDate CGI.rfc1123_date(Time.now)
+    else
+    
+      xml.pubDate CGI.rfc1123_date(@posts.first.created_at)
+    end
+    xml.description h("fav.otitus.com - #{@channel_name} por #{@user_name}")
+    @posts.each do |post|
+      xml.item do
+        xml.title h(post.title)
+        xml.link post_url(:permalink=>post.permalink)
+        xml.description h(post.description)
+        xml.pubDate CGI.rfc1123_date(post.created_at)
+        xml.guid post_url(:permalink=>post.permalink)
+        xml.author post.user.screen_name
+      end
+    end
+  end
+end

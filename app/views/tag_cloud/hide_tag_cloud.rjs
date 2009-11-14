@@ -1,0 +1,7 @@
+#set the contents to empty
+page.replace_html "tag_cloud_header", ""
+#hide the element
+page.hide "tag_cloud_header"
+page.replace_html "show_hide_tag_cloud_link",  link_to_show_tag_cloud
+
+page["secondary_options_ul"].className = "no_tag_cloud"

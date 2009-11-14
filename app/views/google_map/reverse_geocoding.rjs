@@ -1,0 +1,5 @@
+page['user_localization'].value = @name+", "+@country
+page['user_gmap_lat'].value = @lat
+page['user_gmap_long'].value = @long
+page['user_gmap_zoom_level'].value = @zoom_level
+

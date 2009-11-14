@@ -1,0 +1,20 @@
+if @logged
+new_html = render :partial =>"insert_answer" ,:collection=>[@newCommentInfo]
+ 
+page.insert_html :before, "comment_bottom_#{@comment_id}", new_html
+
+page.visual_effect :appear, "new_answer_wrapper_"+@newCommentInfo.post_id
+page.visual_effect :fade, "answer_to_commnet_link_#{@newCommentInfo.post_id}"
+
+ page.delay(2) do
+    page["new_answer_text_area_"+@newCommentInfo.post_id].focus()  
+  end
+  
+  
+else
+  #create an alert box
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Queres deixar uma resposta a este coment&aacute;rio?",register_url,login_url);
+
+end

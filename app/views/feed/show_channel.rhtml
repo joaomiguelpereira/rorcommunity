@@ -1,0 +1,42 @@
+
+<%=render_front_page_extra_nav("view_channel", "- <span>"+@user_channel.name+"</span>")%>
+
+<!--render side bar-->
+<%=side_bar()%>
+    <%=side_bar_container("Podes querer","podes_querer")%>
+     
+    <%if (@user_channel.user_id > 0)%>
+    <div>
+        <a href="<%=user_channels_url(:user_screen_name=>@user_channel.user_screen_name)%>">Ver todos os canais do <%=@user_channel.user_screen_name%></a>
+    </div>
+    
+    <%end%>
+    <div>
+        <a href="<%=channels_url()%>">Ver todos os canais</a>
+    </div>
+    
+    
+    <%=end_side_bar_container%>
+<%=end_side_bar()%>
+
+<!--end side bar-->
+<br style="clear:left"/>
+<div class="main">
+<div class="post-filtering">
+<%=feed_summary(@user_channel)%>
+</div>
+
+
+ 
+<div class="post-filtering">
+
+<a class="rss_title" href="<%=personalized_rss_url(:user_screen_name=>@user_channel.user_screen_name, :permalink=>@user_channel.permalink)%>"><%=personalized_rss_url(:user_screen_name=>@user_channel.user_screen_name, :permalink=>@user_channel.permalink)%></a>
+</div>
+
+<br style="clear:left"/>
+
+
+<%=render :partial=>"post/link_details", :collection=>@posts , :locals=>{:rendering_single=>false, :context=>"front_page"}%>
+
+ <div class="pages"><%=pagination_links( @post_pages )%></div>
+</div>

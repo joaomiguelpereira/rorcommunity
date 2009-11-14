@@ -1,0 +1,420 @@
+<%= navigation_user_profile("user_network",@user) %>
+
+<%
+    #try from the session
+    
+    active_filter = SessionFilter.get_from_session(session)%>
+    
+
+
+
+<%post_ordering = session[:user_network_post_order]%>
+
+<div class="front-page-filtering">
+
+<span class="tool <%if post_ordering==2%>selected<%end%>"><%if post_ordering!=2%><a href="<%=usernetwork_url(:user_screen_name=>@user.screen_name)%>?order=popular"><%end%>Mais populares<%if post_ordering!=2%></a><%end%></span>
+
+<span class="tool <%if post_ordering==1%>selected<%end%>"><%if post_ordering!=1%><a href="<%=usernetwork_url(:user_screen_name=>@user.screen_name)%>?order=recent"><%end%>Mais recentes<%if post_ordering!=1%></a><%end%></span>
+
+<span class="tool <%if post_ordering==3%>selected<%end%>"><%if post_ordering!=3%><a href="<%=usernetwork_url(:user_screen_name=>@user.screen_name)%>?order=less_popular"><%end%>Menos populares<%if post_ordering!=3%></a><%end%></span>
+
+</div>
+<br style="clear:both"/>
+
+
+
+<%if !session[:logged_user].nil?%>
+<div class="front-page-secondary-options">
+
+
+<%
+    user_id = @user.id
+    fan_id = nil
+    is_already_fan = false
+    
+    
+    
+    
+    fan_id = nil
+    if !session[:logged_user].nil?
+        fan_id = session[:logged_user]
+        
+        fanship = UserFriends.get_friendship(@user.id,fan_id)
+
+        link = link_to_remote("Pedir para entrar na rede de amigos do #{@user.screen_name}", :url=>{:controller=>"user", :action=>"request_friendship", :id=>@user,:fan_id=>fan_id },:loading=>"showWaiting()",:complete=>"hideWaiting()")        
+        #if fanship == 1 
+            #fan
+         #   link = link_to_remote("Sou f&atilde; do #{@user.screen_name} mas quero deixar de ser", :url=>{:controller=>"user", :action=>"request_friendship", :id=>@user,:fan_id=>fan_id },:loading=>"showWaiting()",:complete=>"hideWaiting()")
+        #end
+        
+        #if fanship == 0
+            #friend
+        #    link = link_to_remote("Sou amigo do #{@user.screen_name} mas quero deixar de ser", :url=>{:controller=>"user", :action=>"request_friendship", :id=>@user,:fan_id=>fan_id },:loading=>"showWaiting()",:complete=>"hideWaiting()")
+        #end
+    end
+
+        
+%>
+
+<%if fan_id && fan_id != user_id%>    
+<span id="friend_ship_"<%=user_id%> class="tool">
+<%=link%>
+</span>
+<%end%>
+
+
+
+<%if !session[:logged_user].nil? && session[:logged_user].to_s == @user.id.to_s%>
+<span class="tool">
+<label for="include_my_own_posts">Incluir os meus links</label>
+<input class="tool_input" type="checkbox" <%if session[:include_my_own_posts].to_s=="1"%>checked="checked"<%end%> name="include_my_own_posts" id="include_my_own_posts" onchange="change_include_my_own_posts()" />
+</span>
+<%end%>
+
+</div>
+<br style="clear:left"/>
+<%end%>
+
+
+
+
+
+
+<!--here-->
+
+<div class="sidebar">
+
+<%
+    tag_order_sel_freq = ""
+    tag_order_sel_alpha = ""
+    if active_filter.user_friend_tag_cloud_order==1
+        tag_order_sel_freq = "selected"
+    else
+        tag_order_sel_alpha = "selected"
+    end
+  
+  
+    tag_type_sel_list = ""
+    tag_type_sel_cloud = ""
+  
+    if active_filter.user_friend_tag_cloud_type==1
+        tag_type_sel_cloud = "selected"
+    else
+        tag_type_sel_list = "selected"
+    end
+  
+%>
+
+<div class="profile-right-box">
+<div id="user_friends_tags-title" class="expandable-title-expanded"><a href="javascript:void(0)" onclick="show_hide('user_friends_tags')">Tags</a></div>
+    <div id="user_friends_tags">
+    
+        <div id="user_friends_tags_container">
+            <%=render_user_friend_tags(@user)%>
+        </div>
+        <div id="user_friends_tags_bottom_menu">
+        
+            <div id="user_friends_tags_bottom_menu_ordering"><span id="user_friends_tags_bottom_menu_ordering_span">ordenar tags por: </span>
+                <a class="<%=tag_order_sel_freq%>" href="javascript:void(0)" onclick ="_do_clientCall('re_order_tag_cloud','freq')" id="user_friends_tags_bottom_menu_ordering_freq_a">frequ&ecirc;ncia</a>
+                <a class="<%=tag_order_sel_alpha%>" href="javascript:void(0)" onclick ="_do_clientCall('re_order_tag_cloud','alpha')" id="user_friends_tags_bottom_menu_ordering_alpha_a">ordem alfab&eacute;tica</a>
+            </div>
+            
+            <div id="user_friends_tags_bottom_menu_type"> 
+                <span id="user_friends_tags_bottom_menu_type_span">Mostrar como: </span>
+                <a class="<%=tag_type_sel_list%>" href="javascript:void(0)" onclick ="_do_clientCall('re_type_tag_cloud','list')" id="user_friends_tags_bottom_menu_type_list_a">lista</a>
+                <a class="<%=tag_type_sel_cloud%>" href="javascript:void(0)" onclick ="_do_clientCall('re_type_tag_cloud','cloud')" id="user_friends_tags_bottom_menu_type_cloud_a">n&uacute;vem</a>
+            </div>
+            
+        <%if session[:logged_user] && @user.id == session[:logged_user] %>
+            <div id="user_friends_tags_bottom_menu_show_my_tags">
+                <a href="javascript:void(0)"  
+                    onmouseout="_do_clientCall('unHighlightFriendsTags','<%=@user.id%>')" 
+                    onmouseover="_do_clientCall('highlightFriendsTags','<%=@user.id%>')" 
+                    onclick="_do_clientCall('highlightFriendsTagsAndMark','<%=@user.id%>')"
+                    id="user_friends_tags_bottom_menu_show_my_tags_a">marcar as minhas tags</a>
+            </div>
+            <%end%>
+        </div>
+        
+    </div>
+    
+    
+
+    <div id="user_friends-title" class="expandable-title-expanded"><a href="javascript:void(0)" onclick="show_hide('user_friends')">Amigos</a></div>
+    <div id="user_friends">
+           <%
+                UserFriends.get_friends(@user.id).each do |friend|
+            
+        %>
+            
+            <%if session[:logged_user] == @user.id%>
+                <span id="friend_<%=friend.friend.id%>">
+                    <a class="fan_not_selected" id="user_options_<%=friend.friend.id%>" href="javascript:void(0)" onclick="open_fan_options(<%=friend.friend.id%>,'<%=friend.friend.screen_name%>')"><%=friend.friend.screen_name%></a>
+                </span>
+               
+                <%=friend_drop_menu(@user, friend.friend)%>
+                
+            <%
+            else%>
+                <%=link_to friend.friend.screen_name, usernetwork_url(:user_screen_name=>friend.friend.screen_name)%>
+            <%end%>
+        <%
+        
+    end
+
+%>
+    <span id="user_friends_new" style="display:none"></span><!--E esta hein?-->    
+    </div>
+
+    <div id="user_fans-title" class="expandable-title-expanded"><a href="javascript:void(0)" onclick="show_hide('user_fans')">Fans</a></div>
+    <div id="user_fans">
+           <%
+        UserFriends.get_fans(@user.id).each do |fan|
+            
+        %>
+            
+            <%if session[:logged_user] == @user.id%>
+                <span id="fan_<%=fan.friend.id%>">
+                    <a class="fan_not_selected" id="user_options_<%=fan.friend.id%>" href="javascript:void(0)" onclick="open_fan_options(<%=fan.friend.id%>,'<%=fan.friend.screen_name%>')"><%=fan.friend.screen_name%></a>
+                 </span>
+                <%=fan_drop_menu(@user, fan.friend)%>
+            <%
+            else%>
+                <%=link_to fan.friend.screen_name, usernetwork_url(:user_screen_name=>fan.friend.screen_name)%>
+            <%end%>
+        <%
+        
+    end
+
+%>
+    <span id="user_fans_new" style="display:none"></span><!--E esta hein?-->
+    </div>
+
+
+
+</div>
+
+
+</div>
+
+<br style="clear:left"/>
+<div class="post-filtering"><%=render_user_network_tag_filtering%></div>
+
+<div class="profile-view-main" id="user_friends_view_main">
+
+    
+    
+    <%=render :partial=>"post/link_details", :collection=>@posts, :locals=>{:context=> "user_network",:rendering_single =>false}%>
+
+<%if @posts.size == 0 %>
+       
+     <p class="empty_list_info">O utilizador <%=@user.screen_name%> ainda n&atilde;o submeteu ou gravou em qualquer link!!</p>
+<%end%>
+
+    <div class="pages"><%=pagination_links( @post_pages)%></div>
+</div>
+
+
+
+<script type="text/javascript">
+    //<![CDATA[
+  
+    function _do_clientCall(functionName,args) {
+
+        text = functionName;
+        
+        eval(text+"(args)");
+        
+    }
+    
+    
+    function change_tags_operator() {
+      selected = $('tags_operator').value;
+      //window.location = '<%=home_url%>?change_tag_op='+selected;
+       //alert(selected);
+       window.location = '<%=usernetwork_url(:user_screen_name=>@user.screen_name)%>/?tag_filter_user_nw_order='+selected;
+     }
+            
+    <%if active_filter.user_friend_tag_cloud_type==1%>
+    
+        var tag_type_sel = $('user_friends_tags_bottom_menu_type_cloud_a');
+        
+    <%else%>
+        var tag_type_sel = $('user_friends_tags_bottom_menu_type_list_a');
+    <%end%>
+    
+    
+    <%if active_filter.user_friend_tag_cloud_order==1%>
+    
+        var tag_cloud_order_sel = $('user_friends_tags_bottom_menu_ordering_freq_a');
+        
+    <%else%>
+        var tag_cloud_order_sel = $('user_friends_tags_bottom_menu_ordering_alpha_a');
+    <%end%>
+    
+    
+    
+     function re_type_tag_cloud(type) {
+        
+        el = $('user_friends_tags_bottom_menu_type_'+type+'_a')
+        
+        if (tag_type_sel!= null && Element.hasClassName(tag_type_sel,"selected") ) {
+            Element.removeClassName(tag_type_sel,"selected")
+        }
+        Element.addClassName(el,"selected");
+        tag_type_sel = el;
+        
+        
+        new Ajax.Request('/user/reorder_net_tag_cloud?id=<%=@user.id%>&&tag_type='+type, {asynchronous:true, evalScripts:true, onComplete:function(request){hideWaiting()}, onLoading:function(request){showWaiting()}}); return false;
+        
+    }
+    
+    function re_order_tag_cloud(order) {
+        
+        el = $('user_friends_tags_bottom_menu_ordering_'+order+'_a')
+        
+        if (tag_cloud_order_sel!= null && Element.hasClassName(tag_cloud_order_sel,"selected") ) {
+            Element.removeClassName(tag_cloud_order_sel,"selected")
+        }
+        Element.addClassName(el,"selected");
+        tag_cloud_order_sel = el;
+        
+        
+        new Ajax.Request('/user/reorder_net_tag_cloud?id=<%=@user.id%>&&tag_order='+order, {asynchronous:true, evalScripts:true, onComplete:function(request){hideWaiting()}, onLoading:function(request){showWaiting()}}); return false;
+        
+    }
+    
+    var user_tags = new Array();
+    
+    function highlightFriendsTagsAndMark() {
+       el = $('user_friends_tags');
+        
+        //get all user tags
+        //user_friends_tags
+        
+        childs = Element.getElementsByClassName(el,'user_tag')
+        for (var i = 0; i< childs.length; i++) {
+              if (childs[0].hasClassName('mark_selected')) {
+               $('user_friends_tags_bottom_menu_show_my_tags_a').innerHTML = "desmarcar as minhas tags";
+              } else {
+                $('user_friends_tags_bottom_menu_show_my_tags_a').innerHTML= "marcar as minhas tags";
+              }
+                childs[i].toggleClassName('mark_selected');
+            
+             
+        }
+    }
+    
+    function unHighlightFriendsTags(user_id) {
+        
+        for (var i = 0; i< user_tags.length; i++) {
+              
+            if ( user_tags[i].hasClassName('th_selected') ) {
+                user_tags[i].removeClassName('th_selected');
+            
+            }     
+        }
+ 
+    }
+
+    function highlightFriendsTags(user_id) {
+      // el = $('friends_cloud_tag_'+user_id);
+      el = $('user_friends_tags');
+        
+        //get all user tags
+        //user_friends_tags
+        
+        childs = Element.getElementsByClassName(el,'user_tag')
+        counter = 0;
+        //alert(childs.length);
+        for (var i = 0; i< childs.length; i++) {
+              
+            if ( childs[i].hasClassName('user_tag') ) {
+                //alert(childs[i].id);  
+                user_tags[counter++] = childs[i];                         
+                childs[i].addClassName('th_selected');
+            
+            } 
+        }
+    }
+
+
+    function highlightFriendTagLink(tag_id) {
+        //el = $('friends_cloud_tag_'+tag_id);
+        //alert('friends_cloud_tag_'+tag_id);
+        //alert("2");
+        //Element.toggle(el);
+        
+    }
+    function change_include_my_own_posts() {
+        checked = $('include_my_own_posts').checked
+        
+        
+        window.location = '<%=usernetwork_url(:user_screen_name=>@user.screen_name)%>/?include_my_own_posts='+checked;
+    }
+    
+    var visible_user_menu = null;
+    var visible_user_menu_link = null;
+    var old_name = null;
+           
+           
+           function show_hide(name) {
+            
+            if ($(name).visible()) {
+                $(name+'-title').className = 'expandable-title-colapsed';
+                new Effect.Fade($(name));
+            } else {
+                new Effect.Appear($(name));
+                $(name+'-title').className = 'expandable-title-expanded';
+            }
+            
+            
+        }             
+
+    function clearOpenedMenus() {
+       if ( visible_user_menu != null ) { 
+            new Effect.Fade(visible_user_menu);
+        }
+     
+    }
+    
+
+    
+    function open_fan_options(theId,name) {
+        el2 = $('user_option_div_'+theId);
+        el = $('user_options_'+theId);
+        
+        Position.clone(el,el2);
+         
+        
+        el2.style.width = '100px';
+        el2.style.height = 'auto';
+        
+        new Effect.toggle(el2);
+        
+        if ( !Element.hasClassName(el,"fan_selected") ) {
+            
+            Element.addClassName(el,"fan_selected");
+            //el.addClassName = "fan_selected";
+        }
+        else {
+            
+            Element.removeClassName(el,"fan_selected")
+            //el.removeClassName("fan_selected");
+        }
+        if ( visible_user_menu != null && visible_user_menu.id != el2.id) { 
+            new Effect.Fade(visible_user_menu);
+            visible_user_menu_link.removeClassName("fan_selected");
+        }
+        visible_user_menu = el2;
+        visible_user_menu_link = el;
+        old_name = name;
+        
+    }
+    
+
+
+    //]]>
+</script>
+
+

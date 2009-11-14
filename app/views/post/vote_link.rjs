@@ -1,0 +1,39 @@
+
+#page.visual_effect(:fade, @element_id)
+#page.delay(1) do
+
+if @already_voted
+  function_call = ""
+  function_call = "alert_you_voted_already" 
+  page.call(function_call);
+  return
+end
+
+if @logged
+  #page.visual_effect(:highlight, @href_element_id)
+  #page.visual_effect(:appear, @element_id)
+  page.visual_effect(:fade, @href_element_id)
+  page.delay(1) do
+    
+    page.visual_effect(:appear, @href_element_id)
+    page.replace_html @href_element_id, "<strong>#{@votes}</strong> #{pluralize_votes(@votes)}"
+    page[@vote_ul_element_id].className = "news-community-voted"
+    page[@thumbs_el].className = "voted_thumbs_up"
+    
+    page.visual_effect(:fade, @get_sink_el)
+    page.replace_html @vote_href_element_id, link_to_remote("retirar voto",:url=>{:controller=>"post", :action=>"remove_vote_link", :id=>@post_id},:loading=>"showWaiting()",:complete=>"hideWaiting()")
+    link_one = link_to "<strong>#{@votes}</strong> #{pluralize_votes(@votes)}", post_url(:permalink=>@vote_permalink),:id=>"voting_number_#{@post_id}"
+    
+    page.replace_html @element_id, link_one # link_to_remote("<strong>#{@votes}</strong> #{pluralize_votes(@votes)}",{:url=>{:controller=>"post", :action=>"remove_vote_link", :id=>@post_id},:loading=>"showWaiting()",:complete=>"hideWaiting()"},{:id=>"voting_number_#{@post_id}"})             
+  
+  end
+  
+
+else
+  #create an alert box
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Queres fazer o teu voto contar?",register_url,login_url);
+  
+end
+#end

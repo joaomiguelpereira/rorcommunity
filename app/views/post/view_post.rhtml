@@ -1,0 +1,45 @@
+<div class="front-page-right-box">
+<br/>test
+<br/>test
+<br/>test
+<br/>test
+<br/>test
+<br/>test
+</div>
+
+<div class="main"> <!--Satrt Main Section-->
+    <div class="new-body">
+
+
+        <%=render :partial=>"link_details", :collection=>[@post], :locals=>{:rendering_single=>true}%>
+    </div> 
+
+</div>
+
+
+
+<%=render_post_tabs(@post)%>
+
+<div class="comments_ad_image">
+teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>teste<br/>
+</div>
+
+<a name="comments"></a>
+<div class="main-2"> <!--Satrt Main Section-->
+    
+        <%=render :partial =>"comment/post_comment" ,:collection=>@post.comments%>
+       <%if @post.comments.count == 0%>
+        <br/>
+        <div class="no_comments_yet" id="no_comments_yet">Ainda ningu&eacute;m comentou este link. Queres ser o primeiro?</div>
+       <%else%>
+       
+       <div class="no_comments_yet" id="no_comments_yet"></div>
+       <%end%>
+       <div class="view-post-bottom" id="insert_comment">
+       
+        <%=link_to_remote( "Novo comentario",:url=>{:controller=>"comment", :action=>"show_new_comment_area", :id=>@post.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")  %>
+        
+    </div>
+    
+  </div>
+

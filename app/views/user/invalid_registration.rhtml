@@ -1,0 +1,60 @@
+<div class="simple_page">
+
+<div class="warning"><div class="bad_news">Oops!!</div></div>
+<br/>
+
+<p style="color:#CC0000;font-size:120%; font-weight:bold">O utilizador com email <%=@user.email%> est&aacute; registado mas ainda n&atilde;o activou a conta!</p>
+
+
+<p style="font-size:120%; font-weight:bold">Poss&iacute;veis raz&otilde;es:</p>
+<ul>
+    <li>Foi feito um registo com o email <%=@user.email%> mas a activa&ccedil;&atilde;o da conta ainda n&atilde;o foi efectuada</li>
+    <li>A conta do utilizador foi desactivada pelo administrador</li>
+    <li>Ocorreu algum erro durante o registo ou activa&ccedil;&atilde;o que impediu a activa&ccedil;&atilde;o</li>
+</ul>
+
+<p style="font-size:120%; font-weight:bold">O que fazer?</p>
+
+
+<p>Simples. Pedir re-activa&ccedil;&atilde;o da conta.</p>
+<p>Ao pedir re-activa&ccedil;&atilde;o da conta ser&aacute; enviado um email para <%=@user.email%> com a chave de activa&ccedil;&atilde;o que dever&aacute;s utilizar em baixo.</p>
+<div style="font-size: 95%;">(Em alternativa podes seguir o link que te ser&aacute; enviado por email)</div>
+
+
+<span style="font-size:200%;">
+ <%=link_to_remote("Activar conta agora",
+    {:url =>{:controller =>:user, :action=>:reactivate_account, :user=>@user.id},
+      :update =>"sending_email",
+      :loading => "showWaitingDiv()"})%>
+</span>
+
+<div id="sending_email"></div>
+
+<br/>
+<fieldset style="width:500px">
+    <legend>Activa&ccedil;&atilde;o</legend>
+
+    <%= form_tag(:action => "confirm_registration") %>
+    <div class="form-large">
+        <label for="user_activation_activation_key">Chave de activa&ccedil;&atilde;o</label>
+        <%= text_field 'user_activation', 'activation_key' , 'size' => 45, 'title' => "Chave de activa&ccedil;&atilde;o", 'tabindex'=>1%>
+    </div>
+    
+    <br style="clear:both"/>
+    <div class="fieldset-footer">
+        <%= submit_tag "Continuar", {:class=>"form_big_button", :tabindex=>"2", :title=>"Continuar"}%>
+    </div>
+    <%= end_form_tag -%>
+</fieldset>
+
+</div>
+
+</div>
+
+<%=javascript_tag "
+    $('sending_email').hide();
+    function showWaitingDiv() {
+        $('sending_email').show();
+        $('sending_email').update('<div class=\"small_wait_div\">A enviar email de activa&ccedil;&atilde;o</div>');
+    }
+"%>

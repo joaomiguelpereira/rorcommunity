@@ -1,0 +1,43 @@
+
+
+<h1 class="big">Submeter novo link - <span style="font-size:80%; color:#999999">Passo 1 de 2</span></h1>
+
+<div class="instruction"><div>
+<h3>Please follow a few simple guidelines to make digg a better place:</h3>
+<ul class="instruction-list">
+<li><strong>Quality Content:</strong> Is your story on topic? Make sure your story is appropriate for the topic you're submitting it to.</li>
+<li class="instruction-link"><strong>Link Directly to the Source:</strong> Save people time by linking directly to the original news story.</li>
+<li class="instruction-search"><strong>Search First:</strong> Avoid duplication by <a href="/search">searching</a> to ensure nobody has submitted the same story.</li>
+<li class="instruction-write"><strong>Be Descriptive:</strong> You're the story's editor, so explain what it is and why it's cool.</li>
+</ul>
+</div></div>
+
+ <%= form_tag({:controller=>"post", :action => "submit"}, {:onsubmit=>"show_warning()"}) %>  
+<fieldset>
+   
+<legend>URL do Link</legend>
+<div class="form-large">
+
+    <label for="url" accesskey="1">Introduz o endere&ccedil;o do Link</label>
+    <%= text_field 'post', 'link_url' , 'size' => 69, 'title' => "Introduz o link", 'tabindex'=>1%>
+    
+    <br style="clear:both"/>
+    <span class="form-tip">Introduz um URL v&aacute;lido</span>
+    <%= error_for @post, 'link_url' %>
+
+</div>
+<div class="fieldset-footer">
+    <%= submit_tag "Continuar &gt;&gt;", {:class=>"form_big_button", :tabindex=>"4", :title=>BaseHelper.get_message("login.login.login")}%>
+    <div id="show_progress" class="small_wait_div" style="display:none">Esta tarefa pode demorar. Estamos a analisar o link...</div>   
+</div>
+    
+</fieldset>
+
+<%= end_form_tag -%>
+
+<%=javascript_tag "
+    function show_warning(){
+        $('show_progress').show()
+       //  Dialog.info('Esta tarefa pode demorar algum tempo. <br/>Estamos a analisar o Link...<br/><img src=\"/images/progress.gif\"/>' ,{windowParameters: {showProgress:true, maxWidth:'250', className: 'alert'}})
+  }
+ "%>

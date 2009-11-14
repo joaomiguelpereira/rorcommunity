@@ -1,0 +1,25 @@
+
+<%= render_front_page_extra_nav("search") %>
+
+<div class="sidebar"> 
+<div class="profile-right-box" style="margin-top:20px">
+
+</div>
+</div>
+<div>Resultados da pesquisa por
+    <i>&quot;<%= @keywords %>&quot;</i>
+</div>
+
+<div class="main"><%= render :partial=>"link_details", :collection=>@posts, :locals=>{:rendering_single=>false, :context=>"front_page"} %>
+
+
+<%if @posts.size==0%>
+    <div><b>Oops, n&atilde;o foram encontrados resultados para <i>&quot;<%= @keywords %>&quot;</i></b></div>
+    
+    <div>Podes tentar pesquisar <i>&quot;<%= @keywords %>&quot;</i> atrav&eacute;s do Google</div>
+<%end%>
+
+    <div class="pages"><%= pagination_links( @post_pages) %></div>
+</div>
+
+

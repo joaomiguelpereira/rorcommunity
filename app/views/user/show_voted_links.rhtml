@@ -1,0 +1,93 @@
+<%= navigation_user_profile("view_user_posts_votes",@user) %>
+
+<br style="clear:both;"/>
+
+
+
+<div class="user_posts_tip"> O simbolo <img src="/images/iagree.gif" alt="positive vote"/> indica que o utilizador votou positivamente no link. O simbolo <img src="/images/idisagree.gif" alt="negative vote"/> indica que votou negativamente no link</div>
+
+<div class="sidebar"> 
+<div class="profile-right-box">
+  <h1>Podes querer...</h1>
+  <br style="clear:both"/>
+  
+  <table style="font-size:120%">
+    
+    <tr>
+    <td>Ver</td> 
+    <td>
+        <select name="view_user_votes_only" id="view_user_votes_only" class="select_box" onchange="re_view_only()">
+            <option value="view_user_votes_only_1" <%if session[:view_user_votes_only] == "view_user_votes_only_1" %>selected="selected" <%end%>>todos votos</option>
+            <option value="view_user_votes_only_2" <%if session[:view_user_votes_only] == "view_user_votes_only_2" %>selected="selected" <%end%>>apenas votos positivos</option>
+            <option value="view_user_votes_only_3" <%if session[:view_user_votes_only] == "view_user_votes_only_3" %>selected="selected" <%end%>>apenas votos negativos</option>
+            
+         </select>
+    
+    </td>
+    </tr>
+    <tr>
+        <td>Ver votos</td>
+        <td>
+        
+        <select name="view_user_votes_order" id="view_user_votes_order" class="select_box" onchange="re_view_order()">
+            <option value="1" <%if session[:view_user_votes_order] == "1" %>selected="selected" <%end%>>mais recentes</option>
+            <option value="2" <%if session[:view_user_votes_order] == "2" %>selected="selected" <%end%>>mais antigos</option>
+            
+         </select> primeiro
+        
+        
+        
+        </td>
+    </tr>
+   
+    </table>
+    <div>
+    <%if session[:inc_exc_voted_user_links] == "exclude_user_saved"%>
+    <a href="javascript:void(0)" onclick="view_voted('include_user_saved')">Incluir votos em links gravados ou submetidos</a>
+    <%else%>
+        <a href="javascript:void(0)" onclick="view_voted('exclude_user_saved')">Exluir votos em links gravados ou submetidos</a>
+    <%end%>
+  
+  </div>
+</div>
+</div> <!--end sidebar-->
+
+<br/>
+<div class="profile-view-main" id="user_posts_view_main">
+
+<%=render :partial=>"user_voted_link", :collection=>@posts%>
+
+<%if @posts.size == 0 %>
+     <div class="empty_list_info">
+     
+     
+     O utilizador <%=@user.screen_name%> ainda n&atilde;o votou em qualquer link!!
+      
+    
+    
+</div>
+<%end%>
+<div class="user_links"><div class="pages"><%=pagination_links( @post_pages)%></div></div>
+</div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+
+        function re_view_order() {
+               selected = $('view_user_votes_order').value;
+               window.location = '<%=uservoted_url(:user_screen_name=>@user.screen_name)%>/?order='+selected;
+        }    
+        function re_view_only() {
+            selected = $('view_user_votes_only').value;
+            window.location = '<%=uservoted_url(:user_screen_name=>@user.screen_name)%>/?view_only='+selected;
+        }
+    
+        function view_voted(what) {
+            
+            window.location = '<%=uservoted_url(:user_screen_name=>@user.screen_name)%>/?inex='+what;
+        }
+
+    
+    //]]>
+
+</script>

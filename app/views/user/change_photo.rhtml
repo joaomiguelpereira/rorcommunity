@@ -1,0 +1,22 @@
+<div id="header-primary">
+    Passo 1 - Upload da imagem
+</div>
+
+<div class="image_preview">
+    <img src="<%=@user.user_image.url%>" alt="Imagem do utilizador" title="Imagem"/>
+	<div style="text-align:center">Imagem actual</div>
+</div>
+<br style="clear:both"/>
+
+<%= form_tag ( {:controller=>"user_image", :action=>"upload_image"},:multipart=>true)%>
+	<div style="text-align:left; margin-left:13px; margin-top:10px">
+	<%= file_field :user_image, :file_image_data%>
+	</div>
+    <div style="width:100%;font-size:80%; margin-left:13px;text-align:left">Escolhe uma nova imagen to tipo: JPG, PNG, BMP ou GIF</div>
+
+    <br style="clear:both"/>
+    <div style="text-align:left; margin-left:13px; margin-top:10px">
+        <input type="button" value="Cancelar" class="form_button" title="Cancelar"/ onclick="window.close()">
+        <%= submit_tag "Continuar &gt;&gt;", {:class=>"form_button", :tabindex=>"2", :title=>"Continuar"}%>
+    </div>
+<%=end_form_tag%>

@@ -1,0 +1,118 @@
+
+<%=render_component :controller=>"google_map", :action=>"map", :params => {:user_id=>@user.id }%>
+
+<%= navigation_user_profile("personal_info",@user) %>
+
+<!--password change-->
+<br style="clear:both;"/>
+
+
+<fieldset>
+    <legend>A minha identifica&ccedil;&atilde;o</legend>
+	<%if @user.open_id_url.nil?%>
+    <fieldset style="float: right; width:300px;">
+
+        <legend>Alterar Password</legend>
+        <%= form_tag(:controller=>"user", :action => "update_pasword") %>
+
+        <div class="form-large">
+
+            <div class="inline">
+                <label for="user_pw_password"><%= BaseHelper.get_message("login.login.label.password") %></label>
+                <%= password_field 'user_pw', 'password' , 'size' => 20, 'title' => BaseHelper.get_message("login.login.label.password"), 'tabindex'=>6 %>
+            </div>
+
+            <div class="inline">
+                <label for="user_pw_password_confirmation"><%= BaseHelper.get_message("login.login.label.password.confirm") %>
+                </label><%= password_field 'user_pw', 'password_confirmation' , 'size' => 20, 'title' => BaseHelper.get_message("login.login.label.password.confirm"), 'tabindex'=>7 %>
+            </div><!--class="inline"-->
+            <br style="clear:both"/>
+            <span class="form-tip"><%= BaseHelper.get_message("register.password_tip") %></span><%= error_for @user, 'password' %>
+            <br style="clear:both"/><%= submit_tag "Confirmar", {:class=>"form_button", :tabindex=>"8", :title=>"Modificar password"} %>
+
+        </div><%= end_form_tag -%>
+    </fieldset>
+    <%else%>
+		<img src="/images/registered_openid.gif" style="float: right;"/>
+	<%end%>
+    
+    
+    <br/>
+    <%= form_tag(:controller=>"user", :action => "update_profile") %>
+    <div style="margin-left:-10px;"><a href="#" onclick="openPopup()"class="link_as_button">Alterar foto</a></div>
+    <div class="form-large">
+        
+        <table class="form_table">
+			<%if !@user.open_id_url.nil?%>
+            <tr>
+                <td class="read_only_field_label">Identidade OpenID</td>
+                <td class="view_only_field"><%= @user.open_id_url %></td>
+            </tr>
+			
+			<%end%>
+
+            <tr>
+                <td class="read_only_field_label"><%= BaseHelper.get_message("login.login.label.email")%></td>
+                <td class="view_only_field"><%= @user.email %></td>
+            </tr>
+            <tr>
+                <td class="read_only_field_label"><%= BaseHelper.get_message("register.screen_name")%></td>
+                <td class="view_only_field"><%= @user.screen_name  %></td>
+            </tr>
+        </table>
+        
+        <table class="form_table">
+            <tr>
+                <td class="read_only_field_label">Primeiro Nome</td>
+                <td class="read_only_field_label">&Uacute;ltimo Nome</td>
+            </tr>
+            
+            <tr>
+                <td class="view_edit_field_td"><%= text_field 'user', 'first_name' ,'maxlength'=>40, 'size' => 25   , 'title' => "Primeiro Nome", 'tabindex'=>1 %></td>
+                <td class="view_edit_field_td"><%= text_field 'user', 'last_name' , 'maxlength'=>40, 'size' => 25, 'title' => "&Uacute;ltimo Nome", 'tabindex'=>2 %></td>
+            </tr>
+            
+        </table>
+        <span class="form-tip">Primeiro e &uacute;ltimo nome. O teu nome apenas ser&aacute; mostrado &agrave; tua rede de amigos.</span>
+        <%= error_for @user, 'first_name'%><%= error_for @user, 'last_name'%>
+        
+        <label for="user_localization">Local</label>
+        <%= text_field 'user', 'localization' , 'maxlength'=>40, 'size' => 25, 'title' => "local", 'tabindex'=>3 %> 
+        
+        <span id="view_map_link"><%=link_to_remote("(ver mapa)",:url=>{:controller=>"google_map", :action=>"show_user_map"},:loading=>"showWaiting()",:complete=>"hideWaiting()") %></span>
+        
+        <div id="user_location_map" style="display:none"></div>
+        
+        <%= error_for @user, 'localization'%>
+        <br style="clear:both"/>
+        <span class="form-tip">Local onde geralmente te encontras, Ex. Aveiro, Portugal</span>
+        
+        <label for="user_website">Website</label>
+        <%= text_field 'user', 'website' , 'size' => 25, 'title' => "website", 'tabindex'=>4 %>
+        <%= error_for @user, 'website'%>
+        <br style="clear:both"/>
+        <span class="form-tip">Endere&ccedil;o do teu blog ou uma p&aacute;gina pessoal. Ser&aacute; mostrada no teu perfil p&uacute;blico</span>
+        
+    </div>
+    
+<div class="fieldset-footer">
+    <%= submit_tag "Gravar altera&ccedil;&otilde;es", {:class=>"form_big_button", :tabindex=>"5", :title=>"Gravar altera&ccedil;&otilde;es"}%>
+    
+</div>
+    <%=hidden_field 'user', 'gmap_zoom_level'%>
+    <%=hidden_field 'user', 'gmap_lat'%>
+    <%=hidden_field 'user', 'gmap_long'%>
+    
+<%= end_form_tag -%>
+</fieldset>
+
+<%=
+    javascript_tag "
+                
+            function openPopup()
+            {
+              window.open('/user/change_photo','upload','height=355,width=500,toolbar=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes ,modal=yes');
+              
+            }"
+%>
+

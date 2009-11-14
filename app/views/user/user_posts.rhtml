@@ -1,0 +1,176 @@
+<%= navigation_user_profile("view_user_posts",@user) %>
+
+
+<%
+    post_filter = session[:post_filter]
+    filtering_by_tag = ""
+    if !post_filter.nil?
+    
+        filtering_by_tag = render_tag_filtering(post_filter, @user.screen_name)
+    
+    end
+%>
+
+
+<br style="clear:both;"/>
+
+
+<div class="user_posts_tip"> O simbolo <img src="/images/first_submited.gif" alt="first submited"/> indica que o link foi submetido pelo utilizador</div>
+<div class="post-filtering"><%=filtering_by_tag%></div>
+
+<div class="sidebar"> 
+<div class="profile-right-box">
+  <h1>Podes querer...</h1>
+  <br style="clear:both"/>
+  
+  <table style="font-size:120%">
+   
+    <tr>
+        <td>Ver os</td>
+        <td><select name="order_posts_by" id="order_posts_by" class="select_box" onchange="re_order()">
+            
+            <option value="1" <%if session[:order_by_tmp] == "1" %>selected="selected" <%end%>>mais recentes</option>
+            <option value="2" <%if session[:order_by_tmp] == "2" %>selected="selected" <%end%>>mais antigos</option>
+            <option value="3" <%if session[:order_by_tmp] == "3" %>selected="selected" <%end%>>mais votados</option>
+            <option value="4" <%if session[:order_by_tmp] == "4" %>selected="selected" <%end%>>menos votados</option>
+            <option value="5" <%if session[:order_by_tmp] == "5" %>selected="selected" <%end%>>mais populares</option>
+            <option value="6" <%if session[:order_by_tmp] == "6" %>selected="selected" <%end%>>menos populares</option>
+         </select> primeiro</td>
+    </tr>
+    
+    
+    <tr>
+    <td>Ver</td> 
+    <td>
+    
+        <select name="view_user_posts_only" id="view_user_posts_only" class="select_box" onchange="re_view_only()">
+            
+            <option value="view_user_posts_only_1" <%if session[:view_user_posts_only] == "view_user_posts_only_1" %>selected="selected" <%end%>>todos links</option>
+            <option value="view_user_posts_only_2" <%if session[:view_user_posts_only] == "view_user_posts_only_2" %>selected="selected" <%end%>>apenas links submetidos</option>
+            <option value="view_user_posts_only_3" <%if session[:view_user_posts_only] == "view_user_posts_only_3" %>selected="selected" <%end%>>apenas links gravados</option>
+            
+         </select>
+    
+    </td>
+    </tr>
+  </table>
+  
+  <div id="user_tags-title" class="expandable-title-expanded"><a href="javascript:void(0)" onclick="show_hide('user_tags')">Tags</a></div>
+  
+  
+  <div id="user_tags">
+    <div id="user_tags_container">
+        <%=render_tag_cloud_user(@user,session[:tag_order],session[:tag_cloud_type])%>
+    </div>
+  
+    <div class="user_tags_option">ordenar tags por: <a <%if session[:tag_order]==1%> class="selected" <%end%> id="re_order_freq" href="javascript:void(0)" onclick="reorder_tag_cloud('freq','<%=@user.id%>')">frequ&ecirc;ncia</a> <a <%if session[:tag_order]==2%> class="selected" <%end%> href="javascript:void(0)" id="re_order_alpha" onclick="reorder_tag_cloud('alpha','<%=@user.id%>')">ordem alfab&eacute;tica</a></div>
+    <div class="user_tags_option">Mostrar como: <a <%if session[:tag_cloud_type]==2%> class="selected" <%end%> id="redo_tag_cloud_as_list" href="javascript:void(0)" onclick="redo_tag_cloud('list','<%=@user.id%>')">lista</a> <a <%if session[:tag_cloud_type]==1%> class="selected" <%end%> id="redo_tag_cloud_as_cloud" href="javascript:void(0)" onclick="redo_tag_cloud('cloud','<%=@user.id%>')">n&uacute;vem</a></div>
+   
+  </div>
+ 
+  
+  
+  
+</div>
+</div> <!--end sidebar-->
+<br/>
+
+<div class="profile-view-main" id="user_posts_view_main">
+
+<%=render :partial=>"user_link_details", :collection=>@posts%>
+
+<%if @posts.size == 0 %>
+     <div class="empty_list_info">O utilizador <%=@user.screen_name%> ainda n&atilde;o submeteu ou gravou em qualquer link!!</div>
+<%end%>
+
+<div class="user_links"><div class="pages"><%=pagination_links( @post_pages)%></div></div>
+</div>
+      
+  <script type="text/javascript">
+    //<![CDATA[
+            
+            
+            function redo_tag_cloud(type, user_id) {
+                if ($('redo_tag_cloud_as_list').hasClassName('selected'))
+                    $('redo_tag_cloud_as_list').removeClassName('selected')
+                    
+                if ( $('redo_tag_cloud_as_cloud').hasClassName('selected'))
+                    $('redo_tag_cloud_as_cloud').removeClassName('selected')
+              
+                el = $('redo_tag_cloud_as_'+type);
+                
+                el.className = "selected";
+                      
+                new Ajax.Request('/tag_cloud/change_tag_cloud_type?type='+type+'&user_id='+user_id, {asynchronous:true, evalScripts:true, onComplete:function(request){hideWaiting()}, onLoading:function(request){showWaiting()}}); return false;
+            
+            }
+            
+            function reorder_tag_cloud(order,user_id) {
+              
+                if ($('re_order_alpha').hasClassName('selected'))
+                    $('re_order_alpha').removeClassName('selected')
+                    
+                if ( $('re_order_freq').hasClassName('selected'))
+                    $('re_order_freq').removeClassName('selected')
+              
+                el = $('re_order_'+order);
+                
+                el.className = "selected";
+                      
+                new Ajax.Request('/tag_cloud/reorder?order='+order+'&user_id='+user_id, {asynchronous:true, evalScripts:true, onComplete:function(request){hideWaiting()}, onLoading:function(request){showWaiting()}}); return false;
+                
+            }
+            
+            
+           function show_hide(name) {
+            
+            if ($(name).visible()) {
+                $(name+'-title').className = 'expandable-title-colapsed';
+                new Effect.Fade($(name));
+            } else {
+                new Effect.Appear($(name));
+                $(name+'-title').className = 'expandable-title-expanded';
+            }
+            
+            
+        }             
+            function re_view_only() {
+                selected = $('view_user_posts_only').value;
+                window.location = '<%=userposts_url(:user_screen_name=>@user.screen_name)%>/?view_only='+selected;
+            }
+            function re_order() {
+                //get the selected
+                selected = $('order_posts_by').value;
+              
+                window.location = '<%=userposts_url(:user_screen_name=>@user.screen_name)%>/?order='+selected;
+                //new Ajax.Request('/comment/order_user_post_by?user_id=1&order=1', {asynchronous:true, evalScripts:true, onComplete:function(request){hideWaiting()}, onLoading:function(request){showWaiting()}})
+            }
+        function change_tags_operator() {
+             selected = $('tags_operator').value;
+             window.location = '<%=userposts_url(:user_screen_name=>@user.screen_name)%>/?change_tag_op='+selected;
+        }
+
+        function change_cats_operator() {
+            selected = $('cats_operator').value;
+            window.location = '<%=userposts_url(:user_screen_name=>@user.screen_name)%>/?change_cat_op='+selected;
+        }
+        function show_desc(div_id) {
+            text = $('show_desc_link_'+div_id).innerHTML
+            //$('show_desc_div_'+div_id).toggle();
+            if ( text.indexOf("esconder") > -1 ) {
+                    new Effect.Fade($('show_desc_div_'+div_id));      
+                  $('show_desc_link_'+div_id).innerHTML = "descri&ccedil;&atilde;o"
+            } else {
+                new Effect.Appear($('show_desc_div_'+div_id));      
+                $('show_desc_link_'+div_id).innerHTML = "esconder descri&ccedil;&atilde;o"
+            }
+            
+            
+            
+            
+        }
+
+    
+    //]]>
+
+</script>

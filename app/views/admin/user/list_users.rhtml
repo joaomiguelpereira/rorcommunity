@@ -1,0 +1,32 @@
+        <% if flash[:notice] -%>
+            <div id="notice"><%= flash[:notice] %></div>
+        <% end %>
+
+        <h1>Users</h1><%= link_to "Add User", :controller =>"admin/user", :action=>"add_user" %>
+        <table>
+            <tr>
+                <td>Email</td>
+                <td>Screen Name</td>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Actions</td>
+
+            </tr>
+
+            <% for user in @users
+  email = user.email -%>
+                <tr>
+                    <td><%= user.email %></td>
+                    <td><%= h(user.screen_name) %></td>
+                    <td><%= user.first_name %></td>
+                    <td><%= user.last_name %></td>
+                    <td><%= link_to "modify", :action=> "modify_user", :id=> user.id %>&nbsp;
+                    <%= link_to "view", :action=> "view_user", :id=> user.id %>&nbsp;
+                    <%= link_to "remove", {:action=> "remove_user", 
+                                          :id=> user.id}, 
+                    :confirm =>"Are you sure you want to remove User #{user.screen_name}" %></td>
+
+                </tr>
+
+            <% end %>
+        </table>

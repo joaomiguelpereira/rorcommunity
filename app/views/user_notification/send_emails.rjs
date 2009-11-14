@@ -1,0 +1,3 @@
+html = "<input id=\"close_\" type=\"button\" value=\"Ok\" title=\"ok\" onclick=\"post_mailer.closeWindow()\"/> "
+
+page.replace_html "inline_container_content",  @summary+html

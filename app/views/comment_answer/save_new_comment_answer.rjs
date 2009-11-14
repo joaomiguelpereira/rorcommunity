@@ -1,0 +1,37 @@
+unless @saved
+   #page.alert("O coment&aacute;rio n&atilde;o pode ser vazio!!")
+  # page.alert("O coment&aacute;rio n&atilde;o pode ser vazio!!")
+  function_call = ""
+  function_call = "show_alert" 
+  page.call(function_call,"A resposta n&atilde;o pode ser vazia!!");
+  return
+   
+end
+
+if @logged
+  #"number_of_comments_"+@post_id
+  #page.alert(@post_comment)
+  page.visual_effect :fade, "new_answer_wrapper_"+@comment_id
+  #remove element
+  page.remove "new_answer_wrapper_"+@comment_id
+  #page.replace_html "number_of_comments_"+@post_id,@number_of_comments.to_s+" "+pluralize_comments(@number_of_comments)
+  
+  new_html = render :partial =>"comment_answer" ,:collection=>[@comment_answer]
+  page.insert_html :before, "comment_bottom_#{@comment_answer.comment_id}", new_html+"<br style=\"clear:both\"/>"
+  page.visual_effect :appear, "answer_to_commnet_link_#{@comment_id}"
+  page.visual_effect :appear, "comment_answer_boby_#{@comment_answer.id}"
+  #logger.info(page['comment_number_of_answers_#{@comment_id}'])
+  #if page['comment_number_of_answers_#{@comment_id}'].nil?
+  #  page.alert("got to doit")
+  #else
+  new_html_answer = "<a href=\"javascript:void(0)\" id=\"show_answers_link_#{@comment_id.id}\" onclick=\"show_answers('#{@comment_id}')\"><span id=\"show_answers_link_text_#{@comment_id}\">Mostrar respostas</span> <span id=\"comment_number_of_answers_#{@comment_id}\">(#{@number_of_answers.to_s})</span></a> | "
+  
+
+  page.replace_html "show_answers_link_wrapper_#{@comment_id}",new_html_answer  
+  #end
+else
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Queres deixar o teu coment&aacute;rio?",register_url,login_url);
+  
+end

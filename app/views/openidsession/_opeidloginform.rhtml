@@ -1,0 +1,45 @@
+<fieldset class="open_id_bg" style="width: 650px;">
+<legend>Entrar com OpenID</legend>
+<%= form_tag(:controller=>"openidsession", :action => "create") %>
+<div class="form-large">
+        <label for="openid_url">URL OpenID <%=helper_for("openid_url","help_for_url_open_id")%></label>
+		<input onkeyup="enable_submit_button(this)" value="<%=params[:openid_url]%>" type="text" id="openid_url" name="openid_url" title="O teu URL OpenID" tabindex="1" size="50" maxlength="256"/>
+		<br/>
+
+<br/>
+      <label for="session_persistent" class="form-checkbox-label"><%=BaseHelper.get_message("login.login.label.persistent_session")%></label> 
+	  <input type="checkbox" value="1" title="<%=BaseHelper.get_message("login.login.label.persistent_session")%>" id="session_persistent" class="form-checkbox" name="session_persistent" tabindex="2">
+		
+		
+
+</div>
+
+<div class="fieldset-footer">
+    <%= submit_tag BaseHelper.get_message("login.login.login"), {:class=>"form_big_button", :tabindex=>"3", :id=>"open_id_submit_btn", :title=>BaseHelper.get_message("login.login.login")}%>
+    <input  title="<%=BaseHelper.get_message("login.login.cancel_login")%>" class="form_big_button" type="button" tabindex="4" value="<%=BaseHelper.get_message("login.login.cancel_login")%>" onclick="window.location='/'"/>
+
+</div>
+<%= end_form_tag -%>
+</fieldset>
+<!--little javascript-->
+<script language="JavaScript" type="text/javascript">
+Event.observe(window, 'load', function() {
+  $('openid_url').focus();
+  submitBtn = $('open_id_submit_btn');
+  textOpenId = $('openid_url');
+  if (textOpenId.value.strip().length == 0 ) {
+		submitBtn.disabled="disabled";
+	} else {
+		submitBtn.disabled="";
+	}
+});
+
+function enable_submit_button(what) {
+	submitBtn = $('open_id_submit_btn');	
+	if (what.value.strip().length == 0 ) {
+		submitBtn.disabled="disabled";
+	} else {
+		submitBtn.disabled="";
+	}
+}
+</script>

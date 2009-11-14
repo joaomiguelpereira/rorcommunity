@@ -1,0 +1,50 @@
+<div class="<%=cycle("comment-body-a","comment-body")%>" id="post_comment_boby_<%=post_comment.id%>">
+                <div class="right-comment-body"><div class="comment-top-tool"><span class="<%=render_html_class(post_comment.votes)%>" id="comments_number_of_votes_<%=post_comment.id%>"><%=post_comment.votes%> <%=pluralize_votes(post_comment.votes)%> </span>| <a id="comment_content_show_hide_text_<%=post_comment.id%>" onclick="hide_comment('<%=post_comment.id%>')" href="javascript:void(0)">Esconder coment&aacute;rio</a></div></div>
+                <div class="comment-info">
+                    
+                 <div class="comment-user-photo"><img width="22" height="22" src="<%=post_comment.user.user_image.small_url%>" alt="<%=post_comment.user.screen_name%>"/></div> 
+                 <div class="commented-at">Comentado por <a title="<%=post_comment.user.screen_name%>" href="<%=user_url(:user_screen_name=>post_comment.user.screen_name)%>"><span><%=h(post_comment.user.screen_name)%></span></a> &agrave;&nbsp;
+                    <span class="d"><%= date_formatter(post_comment.created_at) %></span> atr&aacute;s <%=render_user_home_page_url(post_comment.user.website)%></div>
+                 </div> 
+                 
+                 
+                 <div class="comment-content" id="comment_content_<%=post_comment.id%>"><%=(h(post_comment.comment)).gsub(/\n/, '<br />').gsub(/(http:\/\/[a-zA-Z\/.?;%]+)/, '<a rel=\"nofollow\" target=\"_blank\" href="\1">\1</a>')%>
+                 
+                
+                </div>
+                <div id="comment_answers_for_<%=post_comment.id%>"> 
+                 <%=render :partial=>"comment_answer/comment_answer", :collection=>post_comment.comment_answers%>
+                <br style="clear:both"/>
+                </div>
+                
+                
+                <div class="comment-bottom" id="comment_bottom_<%=post_comment.id%>">
+                <div class="comment-tool"><span id="answer_to_commnet_link_<%=post_comment.id%>"><%=link_to_remote( "Responder a este coment&aacute;rio", :url=>{:controller=>"comment_answer", :action=>"show_answer_area", :id=>post_comment.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%></span> | 
+                
+                <%if post_comment.comment_answers.count > 0%>
+                <span id="show_answers_link_wrapper_<%=post_comment.id%>"> <a href="javascript:void(0)" id="show_answers_link_<%=post_comment.id%>" onclick="show_answers('<%=post_comment.id%>')"><span id="show_answers_link_text_<%=post_comment.id%>">Esconder respostas</span> <span id="comment_number_of_answers_<%=post_comment.id%>">(<%=post_comment.comment_answers.count%>)</span></a> | </span>
+                <%else%>
+                <span id="show_answers_link_wrapper_<%=post_comment.id%>">Sem respostas |</span>
+                <%end%>
+                
+                <%if session[:logged_user]%>
+                    <%comment_vote = post_comment.user_vote(session[:logged_user])%>
+                    <%unless comment_vote.nil?%>
+                        <%if comment_vote.vote == 1%>
+                            <span class="agree" style="color:#003300">Eu concordei com este coment&aacute;rio &agrave; <%= date_formatter(comment_vote.voted_at) %> atr&aacute;s</span> 
+                        <%else%>
+                            <span class="disagree" style="color:#990000">Eu n&atilde;o concordei com este coment&aacute;rio &agrave; <%= date_formatter(comment_vote.voted_at) %> atr&aacute;s</span>
+                        <%end%>
+                    <%else%>
+                    <span id="comment_agreement_link_<%=post_comment.id%>"><%=link_to_remote( "<span class=\"agree\">concordo</span>", :url=>{:controller=>"comment", :action=>"agree_with_comment", :id=>post_comment.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%>  | <%=link_to_remote( "<span class=\"disagree\">n&atilde;o concordo</span>", :url=>{:controller=>"comment", :action=>"disagree_with_comment", :id=>post_comment.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%></span>
+                    
+                    <%end%>
+                <%else%>
+                    <span id="comment_agreement_link_<%=post_comment.id%>"><%=link_to_remote( "<span class=\"agree\">concordo</span>", :url=>{:controller=>"comment", :action=>"agree_with_comment", :id=>post_comment.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%>  | <%=link_to_remote( "<span class=\"disagree\">n&atilde;o concordo</span>", :url=>{:controller=>"comment", :action=>"disagree_with_comment", :id=>post_comment.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%></span>
+                <%end%>
+                
+                </div>
+
+                </div>
+    </div>
+

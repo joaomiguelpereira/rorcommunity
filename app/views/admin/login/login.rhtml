@@ -1,0 +1,22 @@
+<html>
+
+<head>
+    <title>Signing for admin access</title>
+</head>
+
+<body>
+
+ <% if flash[:notice]-%>
+            <div id="notice"><%=flash[:notice]%></div>
+ <%end-%>
+        
+<%= start_form_tag :action => "signin" %>
+
+<label for "email">Endereco:</label>
+<%= text_field "user", "email"%></br>
+<label for "Password">Password</label>
+<%= password_field "user", "password"%></br>
+<%= submit_tag "Sign In" %>
+<%= end_form_tag%>
+</body>    
+</html>

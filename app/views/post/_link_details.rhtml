@@ -1,0 +1,167 @@
+<%
+
+if rendering_single.nil?
+    rendering_single = false
+end
+
+
+user_network_context = false
+if context && context == "user_network"
+       user_network_context = true
+end
+
+
+#used in user_friends.rhtml
+
+
+
+ranking = 0
+ saved_by = link_details.saved_by + 1
+ nbr_comments = 0
+ if rendering_single 
+    nbr_comments = link_details.comments.count
+    saved_by = link_details.count_saved_by+1
+    ranking = UserPostV.find(link_details.id).rank
+    ranking = ranking.to_f.round()
+ else 
+ 
+ 	ranking = link_details.rank
+    ranking = ranking.to_f.round()
+    nbr_comments = link_details.comments
+ end
+ 
+%>
+
+
+ <%
+        className = "news-community"
+        link_one = link_to_remote("<strong>#{link_details.votes}</strong> #{pluralize_votes(link_details.votes)}",{:url=>{:controller=>"post", :action=>"vote_link", :id=>link_details.id},:loading=>"showWaiting()",:complete=>"hideWaiting()"},{:id=>"voting_number_#{link_details.id}"}) 
+        
+        link_two = link_to_remote("votar",:url=>{:controller=>"post", :action=>"vote_link", :id=>link_details.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")
+        
+		link_three = link_to_remote("N&atilde;o gosto",{:url=>{:controller=>"post", :action=>"sink_link", :id=>link_details.id},:loading=>"showWaiting()",:complete=>"hideWaiting()"},{:class=>"toplinep"}) 
+    
+	
+		class_for_thumbs = ""
+        voted = false
+        if session[:logged_user]
+          
+          if link_details.voted(session[:logged_user])
+            voted = true
+            if link_details.vote == 1 
+                class_for_thumbs = "voted_thumbs_up"
+            end
+            if link_details.vote == -1 
+                class_for_thumbs = "voted_thumbs_down"
+            end
+            
+            
+            #link_one = link_to_remote("<strong>#{link_details.votes}</strong> #{pluralize_votes(link_details.votes)}",{:url=>{:controller=>"post", :action=>"remove_vote_link", :id=>link_details.id},:loading=>"showWaiting()",:complete=>"hideWaiting()"},{:id=>"voting_number_#{link_details.id}"})  
+            #link_one = "<strong>#{link_details.votes}</strong> #{pluralize_votes(link_details.votes)}"        
+     
+
+			link_one = "<a id=\"voting_number_#{link_details.id}\" href=\"/#{link_details.permalink}\"><strong>#{link_details.votes}</strong> #{pluralize_votes(link_details.votes)}</a>"
+            #link_one = link_to "<strong>#{link_details.votes}</strong> #{pluralize_votes(link_details.votes)}", post_url(:permalink=>link_details.permalink),:id=>"voting_number_#{link_details.id}"
+            link_two = link_to_remote("retirar voto",:url=>{:controller=>"post", :action=>"remove_vote_link", :id=>link_details.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")
+            className = "news-community-voted"
+            
+          end 
+        end
+%>
+
+
+<div class="news-summary" id="link_details_<%=link_details.id%>"><!--Start News Summary-->
+    <div id="emailer_container_placeholder_<%=link_details.id%>"></div>
+    <div class="news-body">
+        <h3 id="title_<%=link_details.id%>">
+            
+            <%if rendering_single%>
+            
+                <a href="<%=link_details.link_url%>" title="Abrir nova janela com a origem do link" rel="nofollow" target="_blank"><%=link_details.title%></a>
+            <%else%>
+				<a href="<%=link_details.permalink%>"><%=link_details.title%></a>
+                
+            <%end%>
+            
+            
+        </h3>
+
+        <p class="news-submitted">
+            
+            <a href="/users/<%=link_details.user.screen_name%>" title="Ver o perfil do <%=link_details.user.screen_name%>">
+
+                <img src="<%=link_details.user.user_image.small_url%>" alt="<%=h(link_details.user.screen_name)%>" width="32" height="32" />
+            
+            
+            </a>Submetido por
+            <a href="/users/<%=link_details.user.screen_name%>/posts" title="Ver post do <%=link_details.user.screen_name%>"><%= h(link_details.user.screen_name) %></a> &agrave;&nbsp;
+            <span class="d"><%= date_formatter(link_details.created_at) %></span> atr&aacute;s 
+			(
+            <a target="_blank" rel="nofollow" href="link_details.url_domain"  class="simple"><%= h(link_details.url_domain) %></a>)
+            <span id="votes_thumbs_<%=link_details.id%>" class="<%=class_for_thumbs%>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            
+        </p>
+
+        <p><%= decode_html(h(link_details.description)) %>
+           <%unless rendering_single%>
+            <a href="<%=link_details.link_url%>" title="Abrir nova janela com a origem do link" rel="nofollow" target="_blank" class="open_link_source">Saltar para a origem do link...</a>
+            <%end%>
+        </p>
+        
+        <div class="news-details"><!--start news details-->
+            
+            <a href="/<%=link_details.permalink%>#comments" class="tool comments"><%=nbr_comments%> <%=pluralize_comments(nbr_comments)%></a>
+            
+			
+			
+            
+            
+            <a class="tool"  id="email_link_<%=link_details.id%>" href="javascript:void(0)" onclick="post_mailer.send(<%=link_details.id%>,this, 'Enviar por email','/user_notification/choose_recipients?user_id=<%=session[:logged_user]%>&amp;post_id=<%=link_details.id%>')">Enviar por email</a><a class="tool" href="/whosaved/<%=link_details.permalink%>"><%= render_saved_by(saved_by) %></a>
+            
+            <%if !rendering_single%>
+            <% if link_details.user.id==session[:logged_user] %>
+                <span class="tool"><a href="/post/edit_link/<%=link_details.id%>" title="Editar">Editar</a></span>
+            <% end %>
+            <% if link_details.user.id==session[:logged_user] %>
+                <span class="tool"><%= link_to_remote "Remover", :url=>{:controller=>"post", :action=>"confirm_delete_link", :id=>link_details.id},:confirm=>"Tens a certeza que queres remover permanentemente o link:\n#{link_details.link_url}?",:loading=>"showWaiting()",:complete=>"hideWaiting()" %></span>
+            <% end %>
+            <% end %>
+            
+            
+            <ul class="probdrop" id="get_it_sink_<%=link_details.id%>" <%if voted%> style="display:none"<%end%>>
+                <li>
+                
+                
+                    <%=link_three%>
+                </li>
+            </ul>
+            <span class="tool">Rank:<%=ranking%></span>
+            <br style="clear:left"/>
+           <span class="tool user_link_details_tags">Tags:<%= get_all_labels(link_details.link_url, user_network_context) %></span>
+            
+
+
+        </div>
+
+        
+
+
+
+    
+
+    </div><!--End news body-->
+
+
+   
+    <ul class="<%=className%>" id="voting_ul_<%=link_details.id%>">
+
+        <li class="community-count" id="voting_wrapper_<%=link_details.id%>">
+            <%= link_one%>
+        </li>
+
+        <li class="community-it" id="href_vote_<%=link_details.id%>">
+            <%= link_two%>
+        </li>
+    </ul>
+
+</div>

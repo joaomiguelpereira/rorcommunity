@@ -1,0 +1,90 @@
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%=@api_key%>"
+      type="text/javascript"></script>
+
+<script type="text/javascript">
+
+//<![CDATA[
+
+var googleMap = null;
+var geocoder = null;
+var last_marker = null;
+var zoom_level = <%=@zoom_level%>;
+function find_location_in_map() {
+    location_el = $('user_localization');
+   
+    if (location_el != null && location_el.value.length > 0) {
+        geocoder.getLatLng(location_el.value ,function(point) {
+            if (!point) {
+                
+                show_alert("Huum! Parece que o Google n&atilde;o conhece "+location_el.value+"!!");
+                    
+            } else {
+                googleMap.clearOverlays();
+                googleMap.setCenter(point,zoom_level);
+                var marker = new GMarker(point);
+                googleMap.addOverlay(marker);
+                marker.openInfoWindowHtml("Estou aqui");
+                lat = googleMap.getCenter().lat();
+                long = googleMap.getCenter().lng();
+                
+                $('user_gmap_lat').value = lat;
+                $('user_gmap_long').value = long;
+                $('gmap_zoom_level').value = zoom_level;
+                
+                
+            }
+            }
+        );
+        
+    } else
+       show_alert("Insere a tua localiza&ccedil;&atilde;o para a tentar encontrar no mapa.");
+       
+}
+
+
+function load_google_map() {
+
+    if (GBrowserIsCompatible()) {
+        googleMap = new GMap2(document.getElementById("user_location_map"));
+        geocoder = new GClientGeocoder();
+        googleMap.addControl(new GSmallMapControl());
+        googleMap.addControl(new GMapTypeControl());
+        
+        googleMap.setCenter(new GLatLng(<%=@lat%>, <%=@long%>), zoom_level);
+        
+        <%unless @read_only%>
+        GEvent.addListener(googleMap, "click", addMarker);
+        GEvent.addListener(googleMap, "zoomend", updateZoomLevel)
+        <%end%>
+        
+        <%if @has_point_defined%>
+        var marker = new GMarker(new GLatLng(<%=@lat%>, <%=@long%>));
+        googleMap.addOverlay(marker);
+        marker.openInfoWindowHtml("O <%=@user_name%> est&aacute; aqui!!");
+        <%end%>
+      }
+}
+
+function updateZoomLevel(oldLevel, newLevel ) {
+       zoom_level = newLevel;
+       
+}
+
+function addMarker(marker, point) {
+    googleMap.clearOverlays();
+    var marker = new GMarker(point);
+    googleMap.addOverlay(marker);
+    marker.openInfoWindowHtml("Estou Aqui");
+    googleMap.setCenter(point,zoom_level);
+    update_location_text();
+}
+
+function update_location_text() {
+    lat = googleMap.getCenter().lat();
+    long = googleMap.getCenter().lng();
+    new Ajax.Request('/google_map/reverse_geocoding?zlevel='+zoom_level+'&lat='+lat+'&long='+long, {asynchronous:true, evalScripts:true, onComplete:function(request){hideWaiting()}, onLoading:function(request){showWaiting()}});
+}
+
+//]]>
+
+</script>

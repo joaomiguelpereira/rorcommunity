@@ -1,0 +1,3 @@
+
+
+page.replace_html 'user_tags_container', render_tag_cloud_user(@user,@the_order,@type)

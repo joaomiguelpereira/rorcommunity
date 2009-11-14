@@ -1,0 +1,122 @@
+<div class="front-page-right-box">
+<br/>test
+<br/>test
+<br/>test
+<br/>test
+<br/>test
+<br/>test
+</div>
+
+<div class="main"> <!--Satrt Main Section-->
+    <div class="new-body">
+
+
+        <%=render :partial=>"link_details", :collection=>[@post], :locals=>{:rendering_single=>true}%>
+    </div> 
+
+</div>
+
+
+
+<%=render_post_tabs(@post)%>
+
+<div class="comments_ad_image">
+teste<br/>teste<br/>teste
+</div>
+
+
+<div class="main-2"> <!--Satrt Main Section-->
+    <div class="ordering_user_list">
+    Quero ver quem votou neste link &agrave; 
+     <select name="order_users_by" id="order_users_by" class="select_box" onchange="re_order()">
+            
+            <option value="users_voted_order_2" <%if session[:order_users_voted_by] == "users_voted_order_1" %>selected="selected" <%end%>>mais</option>
+            <option value="users_voted_order_2" <%if session[:order_users_voted_by] == "users_voted_order_2" %>selected="selected" <%end%>>menos</option>
+       </select> tempo.&nbsp;|&nbsp;
+    Ver
+          <select name="order_votes_view_only" id="order_votes_view_only" class="select_box" onchange="view_only()">
+            <option value="users_votes_view_only_1" <%if session[:order_users_view_only] == "users_votes_view_only_1" %>selected="selected" <%end%>>todos votos</option>
+            <option value="users_votes_view_only_2" <%if session[:order_users_view_only] == "users_votes_view_only_2" %>selected="selected" <%end%>>apenas votos positivos</option>
+            <option value="users_votes_view_only_3" <%if session[:order_users_view_only] == "users_votes_view_only_3" %>selected="selected" <%end%>>apenas votos negativos</option>
+       </select> .
+    
+    </div>
+    
+    <div class="user_posts_tip" style="margin-left:10px; margin-top:5px;"> O simbolo <img src="/images/first_submited.gif" alt="first submited"/> indica que o link foi submetido pelo utilizador</div>
+    
+
+<%if @votes.size() == 0 %>
+    <div class="empty_list_info">
+    <%if session[:order_users_view_only] == "users_votes_view_only_1"%> 
+        Este link n&atilde;o tem votos!!
+    <%end%>
+    <%if session[:order_users_view_only] == "users_votes_view_only_2"%> 
+        Este link n&atilde;o tem votos positivos!!
+    <%end%>
+    <%if session[:order_users_view_only] == "users_votes_view_only_3"%> 
+        Este link n&atilde;o tem votos negativos!!
+    <%end%>
+    </div>
+<%end%>
+<%=render :partial=>"who_voted", :collection=>@votes%>
+
+</div>
+
+<div class="user_links"><div class="pages"><%=pagination_links( @votes_pages)%></div></div>
+
+   <script type="text/javascript">
+    //<![CDATA[
+
+    function re_order() {
+        selected = $('order_users_by').value;
+        window.location = '<%=votedby_url(:permalink=>@post.permalink)%>/?order='+selected;
+    }
+    
+    function view_only() {
+        selected = $('order_votes_view_only').value;
+        window.location = '<%=votedby_url(:permalink=>@post.permalink)%>/?viewonly='+selected;
+    }
+    
+    var visible_user_menu = null;
+    var visible_user_menu_link = null;
+    //Event.observe(window, "click", clear_user_menus);
+    //function clear_user_menus() {
+    //    if ( visible_user_menu != null ) { 
+    //        new Effect.Fade(visible_user_menu);
+    //        visible_user_menu_link.innerHTML = "Eu quero...&raquo;";
+    //    }
+        
+    //}
+    
+    function open_user_option(theId) {
+        
+        el2 = $('user_option_div_'+theId);
+        el = $('user_options_'+theId);
+        
+        Position.clone(el,el2);
+         
+        
+        el2.style.width = '100px';
+        el2.style.height = 'auto';
+        
+        new Effect.toggle(el2);
+        
+        if ( el.innerHTML.indexOf("Eu quero")>-1 )
+            el.innerHTML = "Esconder";
+        else
+            el.innerHTML = "Eu quero...&raquo;";
+            
+        if ( visible_user_menu != null && visible_user_menu.id != el2.id) { 
+            new Effect.Fade(visible_user_menu);
+            visible_user_menu_link.innerHTML = "Eu quero...&raquo;";
+        }
+        visible_user_menu = el2;
+        visible_user_menu_link = el;
+        
+        
+    }
+    
+    //]]>
+
+</script>
+

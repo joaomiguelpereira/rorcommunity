@@ -1,0 +1,97 @@
+<div class="positive"><div class="great_news">Parab&eacute;ns. Est&aacute; quase...</div></div>
+
+<h2>Novo utilizador com OpenID </h2>
+
+<div class="simple_page">
+	
+<p class="first" style="font-size: 115%; line-height: 1.6;">Esta &eacute; a primeira vez que entras no <%=BaseHelper.get_message("service.name")%> com a tua identidade <strong>OpenID</strong>. Antes de utilizares todos os servi&ccedil;os aqui disponibilizados, precisas de confirmar alguns dados.</p>
+
+<p class="first" style="font-size: 115%; line-height: 1.6;"><strong>Apenas tens de fazer isto uma vez. </strong>Podes utilizar os dados fornecidos pelo teu servidor <b>OpenID</b> (caso existam) ou introduzir outros para utilizar no <%=BaseHelper.get_message("service.name")%>.</p>
+
+</div>
+
+<fieldset class="open_id_bg" style="width: 650px;">
+<legend>Confirmar dados</legend>
+
+<div class="form-large">
+        <label for="user_email">Email</label>
+		<input onkeyup="detect_enter_key(event)" value="<%=@email%>" type="text" id="user_email" name="email" title="O teu Email" tabindex="1" size=50 maxlength=256">
+		<span id="br_for_email_errors"></span>
+		<span class="fieldWithErrors" style="display:none" id="email_errors"></span>
+		<br/>
+		<span class="form-tip"><%=BaseHelper.get_message("register.email_tip")%></span>
+        
+		<label for="user_screen_name">Nome de utilizador</label>
+		<input onkeyup="detect_enter_key(event)" value="<%=@nickname%>" type="text" id="user_screen_name" name="screen_name" title="Nome de utilizador" tabindex="2" size=20 maxlength=20">
+		<span id="br_for_screen_name_errors"></span>
+		<span class="fieldWithErrors" style="display:none" id="screen_name_errors"></span>
+
+		<br/>
+		<span class="form-tip"><%=BaseHelper.get_message("register.screen_name_tip")%></span>
+		<input value="<%=@openid_url%>" type="hidden" id="openid_url">
+
+</div>
+<img style="display:none" src="/images/flower-blue.gif" alt="Please wait..." id="wait_img">
+<span style="display:none"  id="wait_msg">Aguarda enquanto criamos a tua conta...</span>
+<div class="fieldset-footer">
+	
+    <input type="button" onclick="create_account()" value="Criar" title="Criar Conta" class="form_big_button" tabindex="3" id="open_id_submit_btn">
+    <input title="<%=BaseHelper.get_message("login.login.cancel_login")%>" class="form_big_button" type="button" tabindex="3" value="<%=BaseHelper.get_message("login.login.cancel_login")%>" id="open_id_cancel_btn" onclick="window.location='/'"/>
+</div>
+
+</fieldset>
+
+<script language="JavaScript" type="text/javascript">
+Event.observe(window, 'load', function() {
+  $('user_email').focus();
+});
+
+function doWaiting() {
+	$('wait_img').show();
+	$('wait_msg').show();
+	
+	$('user_email').disabled = "disabled"
+	$('user_screen_name').disabled = "disabled"
+	$('open_id_submit_btn').disabled = "disabled"
+	$('open_id_cancel_btn').disabled = "disabled"
+}
+
+function enableAll() {
+	$('wait_img').hide();
+	$('wait_msg').hide();
+	
+	$('user_email').disabled = ""
+	$('user_screen_name').disabled = ""
+	$('open_id_submit_btn').disabled = ""
+	$('open_id_cancel_btn').disabled = ""
+}
+
+function completeRequest() {
+		
+}
+
+function detect_enter_key(event) {
+	
+	if (event != null) {
+		var key = event.which || event.keyCode;
+			
+			if (key == 13 ) {
+				
+				create_account();
+			}
+	}
+	
+}
+
+function create_account() {
+//	doWaiting();
+	email = $('user_email').value;
+	screen_name = $('user_screen_name').value;
+	open_id = $('openid_url').value;
+	
+	
+	new Ajax.Request('/openidsession/create_account_from_openid?email='+email+'&user_screenname='+screen_name+'&openid='+open_id, {asynchronous:true, evalScripts:true, onComplete:function(request){completeRequest()}, onLoading:function(request){doWaiting()}});	
+	//call ajax function
+
+}
+</script>

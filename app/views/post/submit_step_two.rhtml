@@ -1,0 +1,686 @@
+<div id="submit_link_erors" class="warning" style="display:none"><div>Ocorreram alguns erros durante a valida&ccedil;&atilde;o.<br/>Por favor verifica a informa&ccedil;&atilde;o! submetida</div></div>
+<% if @is_update%>
+<h1 class="big">Modificar link </h1>
+
+<%else%>
+<h1 class="big">Submeter novo link - <span style="font-size:80%; color:#999999">Passo 2 de 2</span></h1>
+<%end%>
+
+<%=if @is_update
+    form_tag ({:controller=>"post", :action => "update_link", :id=>@post.id} ,{:onsubmit=>"return validate()"})
+else
+    form_tag ({:controller=>"post", :action => "save_link"} ,{:onsubmit=>"return validate()"})
+end%>
+
+<%unless @original%>
+   <span class="link_small_info">Este link foi submitido por <span style="font-size:130%; font-weight:bold;background:#FFFFCC;"><%=@saved_by%></span> 
+   <%if @saved_by.to_i > 1%>
+   utilizadores.
+   <%else%>
+   utilizador.
+   <%end%>
+   </span>
+   
+    <br/>   
+   <%end%>
+
+<fieldset>
+    
+<legend>Detalhes do Link</legend>
+<div class="form-large">
+    <%unless @is_update%>
+        <div>Novo link:</div> 
+    <%else%>
+        <div>Editar link:</div> 
+     <%end%>
+
+    
+    
+    <div class="sucess_link_posted"><%=@post.link_url%></div>
+        <%= hidden_field 'post', 'link_url'%>
+    <label for="post_title">T&iacute;tulo <span class="required">(Obrigat&oacute;rio)</span></label>
+    <%= text_field 'post', 'title' , 'size' => 100, 'title' => "Introduz o link", 'tabindex'=>1%>
+    
+    <br style="clear:both"/>
+    
+    
+    <div id="error_title" style="display:none" class="fieldWithErrors">O t&iacute;tulo &eacute; obrigat&oacute;rio e poder&aacute; conter no m&iacute;nimo 4 e no m&aacute;xiumo 100 caract&eacute;res!</div>
+
+    <label for="post_description">Descri&ccedil;&atilde;o</label>
+    <%= text_area 'post', 'description' , 'cols'=>80,'rows'=>3, 'title' => "Descri&ccedil;&atilde;o", 'tabindex'=>2%>
+    <br style="clear:both"/>
+    
+    
+    <%= error_for @post, 'description' %>
+
+    <label for="post_temp_tags">Tags</label>
+    <%= text_area 'post', 'temp_tags' , 'cols'=>80,'rows'=>2, 'title' => "Tags", 'tabindex'=>3, 'onkeyup'=>'doAutoSearch(event)'%>
+    
+    <br style="clear:both"/>
+    <span class="form-tip">As tags devem ser separadas por espa&ccedil;os.</span>
+    <div id="autocomplete">&nbsp;</div>
+    
+    <%if @found_tags.size > 0 %>
+        <div class="proposed_tags"><span>Tags encontradas: </span><%=render_linkable_tags(@found_tags)%></div>
+    <%end%>
+    
+    <%if @recommended_tags.size  > 0 %>
+        <div class="proposed_tags"><span>Tags recomendadas: </span><%=render_linkable_tags(@recommended_tags)%></div>
+    <%end%>
+    
+    
+    <%if @your_tags.size  > 0 %>
+        <div class="proposed_tags"><span>As tuas tags: </span><%=render_linkable_tags(@your_tags)%></div>
+    <%end%>
+
+    <!--<label for="post_temp_cats">Categorias <span class="required">(Obrigat&oacute;rio)</span></label>-->
+    <%render_categories%>
+    
+  
+    <%= hidden_field 'post', 'temp_cats'%>
+    <%= hidden_field 'post', 'old_tags'%>
+
+    <!--<span class="form-tip">Selecciona uma ou mais categorias para o teu link</span>-->
+
+     <div id="error_cats" style="display:none" class="fieldWithErrors">Selecciona pelo menos uma categoria</div>
+
+<% unless @is_update%>
+    <% unless @already_voted%>
+    <label for="post_make_vote_on_submit">Queres fazer o teu voto contar neste link?</label>
+    <span onclick="swap_checked('post_make_vote_on_submit_yes')">Sim, sff </span><%=radio_button "post", "make_vote_on_submit", "yes", {:class=>"form-checkbox"}%>
+    <span onclick="swap_checked('post_make_vote_on_submit_no')">N&atilde;o, obrigado </span><%=radio_button "post", "make_vote_on_submit", "no",{:class=>"form-checkbox"}%>
+    <%else
+        @post.make_vote_on_submit = "no"%>   
+        <%=hidden_field "post", "make_vote_on_submit"%>
+    <%end%>
+<%end%>    
+<%=hidden_field "post", "permalink"%>
+</div>
+
+<div class="fieldset-footer">
+    <%= submit_tag "Continuar &gt;&gt;", {:class=>"form_big_button", :tabindex=>"4", :title=>"Continuar"}%>
+</div>
+</fieldset>
+
+<%= end_form_tag -%>
+
+
+<script type="text/javascript">
+//<![CDATA[
+    function swap_checked(what) {
+        $(what).checked="checked";
+    }
+    $('post_title').focus()
+    selected_cats = $('post_temp_cats').value.split(',');
+    for (var i=0; i< selected_cats.length; i++ ) {
+        try {
+            $(selected_cats[i]).addClassName('highlight_sel_tag');
+        } catch(e) {}
+    }
+    
+    
+    
+    function validate() {
+        //verify if title exists
+       //verify if any cat is selected
+       //Remove special chars here, because ruby is crazy...
+       
+        title = $('post_title').value
+        //var reg = new RegExp("a","i");
+        var cleared_title = "";
+        temp = title.toLowerCase();
+        special_char_code = new Array()
+        special_char_code[227] = 97;
+        special_char_code[225] = 97;
+        special_char_code[224] = 97;
+        special_char_code[226] = 97;
+        
+        special_char_code[233] = 101;
+        special_char_code[232] = 101;
+        special_char_code[234] = 101;
+        
+        special_char_code[237] = 105;
+        special_char_code[236] = 105;
+        special_char_code[238] = 105;
+
+        special_char_code[243] = 111;
+        special_char_code[242] = 111;
+        special_char_code[245] = 111;
+        special_char_code[244] = 111;
+        
+        special_char_code[250] = 117;
+        special_char_code[249] = 117;
+        special_char_code[251] = 117;
+        
+        special_char_code[231] = 99;
+        
+        
+        
+        
+        for (var i=0; i<temp.length; i++) {
+            if (special_char_code[temp.charCodeAt(i)] != null )
+                cleared_title += String.fromCharCode(special_char_code[temp.charCodeAt(i)]); 
+            else
+                cleared_title += String.fromCharCode(temp.charCodeAt(i));
+        }
+        
+        
+            
+         
+        
+        title = $('post_title').value
+       
+        return_val = true;
+        
+        if ( title.length < 4 || title.length > 101) {
+            $('submit_link_erors').show()
+            $('error_title').show()
+            return_val = false;
+        } else {
+            $('error_title').show().hide()
+            
+        }
+        $('post_temp_cats').value = "2,";//hack
+        post_temp_cats = $('post_temp_cats').value
+        //alert(post_temp_cats);
+        if ( post_temp_cats.length == 0 ) {
+            $('submit_link_erors').show()
+            $('error_cats').show()
+            return_val = false;
+        } else {
+            $('error_cats').show().hide()
+        }
+        <% if !@is_update%>
+        if (return_val)
+            $('post_permalink').value = cleared_title
+        <%end%>
+        //alert(cleared_title);
+        //return false;
+        
+        return return_val;
+    }
+    function swapCat(el) {
+    
+        if ( !$(el).hasClassName('highlight_sel_tag') ) {
+            $(el).addClassName('highlight_sel_tag');
+            $('post_temp_cats').value += el+',';
+
+        } else {
+            var reg = new RegExp(el+',',"i");
+            $('post_temp_cats').value = $('post_temp_cats').value.sub(reg,function(match){return ''});
+            $(el).removeClassName('highlight_sel_tag');
+
+            
+        }
+    }
+    
+    <%if @found_tags.size  > 0 %>
+        var found_highlited_tags = new Array();
+        var found_tags = $H({<%=build_javascript_hash_map_for(@found_tags)%>})    
+    <%end%>
+    
+    <%if @recommended_tags.size > 0 %>
+        var recommended_highlited_tags = new Array();
+        var recommended_tags = $H({<%=build_javascript_hash_map_for(@recommended_tags)%>})    
+    <%end%>
+
+    <%if @your_tags.size  > 0 %>
+        var your_highlited_tags = new Array();
+        var your_tags = $H({<%=build_javascript_hash_map_for(@your_tags)%>})    
+    <%end%>
+    
+    //higlith the tags
+    <% if @is_update%>
+         <%if @found_tags.size > 0 %>
+            parse_found_tags($('post_temp_tags').value);
+        <%end%>
+        
+        <%if @recommended_tags.size > 0 %>
+            parse_recommended_tags($('post_temp_tags').value);
+        <%end%>
+        
+        <%if @your_tags.size  > 0 %>
+            parse_your_tags($('post_temp_tags').value);
+        <%end%>    
+    <%end%>
+    function addTag(tag) {
+        var text_area_text = '';
+        text_area_text += $('post_temp_tags').value;
+        var temp_text = text_area_text;
+        
+        //verify if it already exists
+        var tags_array = text_area_text.split(' ');
+        var newValue = $(tag).innerHTML;
+        var toAdd = true;
+        for (var i=0; i<tags_array.length; i++) {
+            if (tags_array[i].toLowerCase() == newValue.toLowerCase()) {
+                //remove it from the tag from text_area_text
+                
+                var reg = new RegExp(newValue+' ',"i");
+                   
+                temp = text_area_text.sub(reg,function(match){return ''});
+                
+                if (text_area_text == temp ) {
+                     
+                     reg = new RegExp(' '+newValue,"i");
+                     temp = text_area_text.sub(reg,function(match){return ''});
+                     if ( text_area_text == temp ) {
+                        reg = new RegExp(newValue,"i");
+                        text_area_text = text_area_text.sub(reg,function(match){return ''});
+                     } else {
+                        text_area_text = temp
+                     }
+                } else {
+                    text_area_text = temp
+                }
+                    
+                //if ( text_area_text.lastIndexOf(' ') == text_area_text.length -1 ) {
+                   
+                   
+                   //var pattern = new RegExp([newValue+' ',['g' | 'i']]);
+                   //text_area_text = text_area_text.sub(newValue+' ','');
+                   //text_area_text = text_area_text.sub(pattern,'');
+                  // var reg = new RegExp(newValue+' ',"i");
+                   
+                   //text_area_text = text_area_text.sub(reg,function(match){return ''});
+                   //text_area_text = text_area_text.sub(/desktop/i,function(match){return ''});
+                   
+                //}
+                //else {
+                    //alert('ere');
+                    //var pattern = new RegExp([newValue,['g' | 'i']]);
+                    //text_area_text = text_area_text.sub(pattern,'');
+                  //  var reg = new RegExp(' '+newValue,"i");
+                   // text_area_text = text_area_text.sub(reg,function(match){return ''});
+                    //text_area_text = text_area_text.sub(' '+newValue,'');
+                //}
+                    
+                //if (text_area_text.charAt[0]!=' ' && text_area_text.charAt[text_area_text.length-1]!=' ') {
+                 //   var reg = new RegExp(newValue,"i");
+                  //  text_area_text = text_area_text.sub(reg,function(match){return ''});
+                // 
+                
+                toAdd = false;
+            } 
+        }
+        
+        if (toAdd) {
+            //if last char is not an space
+            if ( text_area_text.lastIndexOf(' ') == text_area_text.length -1 )
+                text_area_text +=newValue+' ';
+            else
+                text_area_text +=' '+newValue+' ';
+                
+         } 
+         //normalize - Remove additional spaces if any when remove
+         if (!toAdd) {
+            if (text_area_text.indexOf(' ') == 0 ) {
+                text_area_text = text_area_text.substr(1,text_area_text.length);
+            } 
+            
+            
+         }
+         
+        $('post_temp_tags').value = text_area_text
+        var temp_text = text_area_text;
+        
+        <%if @found_tags.size > 0 %>
+            parse_found_tags(text_area_text);
+        <%end%>
+        
+        <%if @recommended_tags.size > 0 %>
+            parse_recommended_tags(text_area_text);
+        <%end%>
+        
+        <%if @your_tags.size  > 0 %>
+            parse_your_tags(text_area_text);
+        <%end%>
+        
+    }
+    
+    function doAutoSearch(event) {
+
+        if (event != null) {
+            var key = event.which || event.keyCode;
+        }
+        
+        var text_area_text = $('post_temp_tags').value.toLowerCase()
+          
+        <%if @found_tags.size  > 0 %>
+            parse_found_tags(text_area_text);
+        <%end%>
+
+        <%if @recommended_tags.size > 0 %>
+            parse_recommended_tags(text_area_text);
+        <%end%>
+        
+        <%if @your_tags.size  > 0 %>
+            parse_your_tags(text_area_text);
+        <%end%>
+        //get the last word after the last space
+        //find any match in the three arrays
+        last_word = getLastWord(text_area_text);
+        //find in your_tags a match
+        var matches = new Array();
+        
+        <%if @found_tags.size  > 0 %>
+            matches = get_from_found_tags_matches(last_word,matches);
+        <%end%>
+        
+        <%if @recommended_tags.size > 0 %>
+        matches = get_from_recommended_tags_matches(last_word,matches);
+        <%end%>
+        
+        <%if @your_tags.size  > 0 %>
+        matches = get_from_your_tags_matches(last_word,matches);
+        <%end%> 
+        
+        var new_suggestion = "";
+        
+        if (matches.length>0)
+            new_suggestion +="<span class=\"sugestion\">Sugest&atilde;o: </span>";
+            
+        for (var i=0; i<matches.length; i++) {
+            new_suggestion += '<a href="javascript:add_suggestion(\''+matches[i]+'\')">'+matches[i]+'</a> ';
+        }
+        if (new_suggestion == "") new_suggestion= "&nbsp;";
+        $('autocomplete').update(new_suggestion);
+        $('post_temp_tags').focus();
+    }
+
+    function add_suggestion(sugestion) {
+        var temp_txt = $('post_temp_tags').value;
+        //get the last word
+        last_word = getLastWord(temp_txt);
+        
+        //replace the last word by the suggestion
+        var reg = new RegExp(last_word+'$',"i");
+        temp_txt = temp_txt.sub(reg, function(match){return sugestion+' '});
+        
+        $('post_temp_tags').value = temp_txt;
+        doAutoSearch(null);
+        
+    }
+    function getLastWord(str) {
+        var tags_array = str.split(' ');
+        return tags_array[tags_array.length-1];
+    }
+
+    <%if @recommended_tags.size  > 0 %>
+    function get_from_recommended_tags_matches(word,matches) {
+
+        if (word==' ' || word=='') {
+            return matches;
+        }
+        
+        recommended_tags.each(function(pair) {
+            var reg = new RegExp('\^'+word.toLowerCase(),"i");
+            if ( pair.value.toLowerCase().search(reg) >=0 ) 
+            {
+                //verify if exists in any highlited tags
+                if ( !is_highlited( pair.value.toLowerCase() ) ) 
+                {
+                    if ( !in_array(matches, pair.value.toLowerCase()) )
+                        matches[matches.length] = pair.value;
+                }
+            }     
+          });
+        return matches;
+    
+    }
+    <%end%>
+    
+    <%if @found_tags.size  > 0 %>
+    function get_from_found_tags_matches(word,matches) {
+
+        if (word==' ' || word=='') {
+            return matches;
+        }
+        
+        found_tags.each(function(pair) {
+            var reg = new RegExp('\^'+word.toLowerCase(),"i");
+            if ( pair.value.toLowerCase().search(reg) >=0 ) {
+                //verify if exists in any highlited tags
+                if (!is_highlited(pair.value.toLowerCase())) {
+                    if (!in_array(matches, pair.value.toLowerCase()))
+                        matches[matches.length] = pair.value;
+                }
+               }     
+          });
+        return matches;
+    
+    }
+
+   <%end%>
+   
+   <%if @your_tags.size  > 0 %>
+    function get_from_your_tags_matches(word,matches) {
+
+        if (word==' ' || word=='') {
+            return matches;
+        }
+        
+        your_tags.each(function(pair) {
+            var reg = new RegExp('\^'+word.toLowerCase(),"i");
+            if ( pair.value.toLowerCase().search(reg) >=0 ) {
+                //verify if exists in any highlited tags
+                if (!is_highlited(pair.value.toLowerCase())) {
+                    if (!in_array(matches, pair.value.toLowerCase()))
+                        matches[matches.length] = pair.value;
+                }
+               }     
+          });
+        return matches;
+    
+    }
+    <%end%>
+    function in_array(array, elem ) {
+        for (var i=0; i<array.length; i++ ) {
+            if ( array[i].toLowerCase() == elem ) 
+                return true;
+        }
+        return false;
+    }
+    
+    
+    function is_highlited(word) {
+        
+        <%if @found_tags.size  > 0 %>
+
+            for (var i=0; i<found_highlited_tags.length; i++) {
+
+                if ( found_tags[found_highlited_tags[i]].toLowerCase() == word.toLowerCase() ) {
+                    return true;
+                }
+            }
+        <%end%>
+        
+        <%if @your_tags.size  > 0 %>
+
+            for (var i=0; i<your_highlited_tags.length; i++) {
+
+                if ( your_tags[your_highlited_tags[i]].toLowerCase() == word.toLowerCase() ) {
+                    return true;
+                }
+            }
+        <%end%>
+        
+        <%if @recommended_tags.size  > 0 %>
+
+            for (var i=0; i<recommended_highlited_tags.length; i++) {
+
+                if ( recommended_tags[recommended_highlited_tags[i]].toLowerCase() == word.toLowerCase() ) {
+                    return true;
+                }
+            }
+        <%end%>
+
+        return false;
+    }
+    
+   <%if @your_tags.size  > 0 %>
+    function parse_your_tags(str) {
+        var tags_array = str.split(' ');
+        var temp_tags = new Array();
+        
+        for (var i=0; i<tags_array.length; i++) {
+           // debug('Tag Found: '+tags_array[i]);
+            
+            your_tags.each(function(pair) {
+                if ( pair.value.toLowerCase() == tags_array[i].toLowerCase() ) {
+                    
+                    if ( ! $(pair.key).hasClassName('highlight_sel_tag') ) {
+                        $(pair.key).addClassName('highlight_sel_tag');
+                    }
+                    temp_tags[temp_tags.length] = pair.key;
+                }     
+            });
+    
+        }
+        clearYourHighlightedTags(temp_tags);
+       
+    }
+    
+    function clearYourHighlightedTags(temp_tags) {
+        
+        
+        var exists = false;
+        for (var i=0; i<your_highlited_tags.length; i++) {
+            //for each element in highlited
+            
+            
+            for (var k=0; k<temp_tags.length; k++) {
+                //check if exists in temp    
+                if (your_highlited_tags[i].toLowerCase() == temp_tags[k].toLowerCase()) {
+                    exists = true; //exists in both 
+                    break;
+                }
+              
+              
+            }
+            if (!exists)
+                $(your_highlited_tags[i]).removeClassName('highlight_sel_tag');
+            
+            exists = false;
+        }
+        your_highlited_tags = temp_tags;
+    
+    }
+    <%end%>
+    
+    
+    
+   
+    <%if @recommended_tags.size > 0 %>
+    function parse_recommended_tags(str) {
+        var tags_array = str.split(' ');
+        var temp_tags = new Array();
+        
+        for (var i=0; i<tags_array.length; i++) {
+           // debug('Tag Found: '+tags_array[i]);
+            
+            recommended_tags.each(function(pair) {
+                if ( pair.value.toLowerCase() == tags_array[i].toLowerCase() ) {
+                    
+                    if ( ! $(pair.key).hasClassName('highlight_sel_tag') ) {
+                        $(pair.key).addClassName('highlight_sel_tag');
+                    }
+                    temp_tags[temp_tags.length] = pair.key;
+                }     
+            });
+    
+        }
+        clearRecommendedHighlightedTags(temp_tags);
+       
+    }
+    
+    function clearRecommendedHighlightedTags(temp_tags) {
+        
+        
+        var exists = false;
+        for (var i=0; i<recommended_highlited_tags.length; i++) {
+            //for each element in highlited
+            
+            
+            for (var k=0; k<temp_tags.length; k++) {
+                //check if exists in temp    
+                if (recommended_highlited_tags[i].toLowerCase() == temp_tags[k].toLowerCase()) {
+                    exists = true; //exists in both 
+                    break;
+                }
+              
+              
+            }
+            if (!exists)
+                $(recommended_highlited_tags[i]).removeClassName('highlight_sel_tag');
+            
+            exists = false;
+        }
+        recommended_highlited_tags = temp_tags;
+    
+    }
+    <%end%>
+    
+    
+    <%if @found_tags.size  > 0 %>
+    function parse_found_tags(str) {
+        var tags_array = str.split(' ');
+        var temp_tags = new Array();
+        
+        for (var i=0; i<tags_array.length; i++) {
+           // debug('Tag Found: '+tags_array[i]);
+            
+            found_tags.each(function(pair) {
+                if ( pair.value.toLowerCase() == tags_array[i].toLowerCase() ) {
+                    
+                    if ( ! $(pair.key).hasClassName('highlight_sel_tag') ) {
+                        $(pair.key).addClassName('highlight_sel_tag');
+                    }
+                    temp_tags[temp_tags.length] = pair.key;
+                }     
+            });
+    
+        }
+        clearFoundHighlightedTags(temp_tags);
+       
+    }
+    
+    function clearFoundHighlightedTags(temp_tags) {
+        
+        
+        var exists = false;
+        for (var i=0; i<found_highlited_tags.length; i++) {
+            //for each element in highlited
+            
+            
+            for (var k=0; k<temp_tags.length; k++) {
+                //check if exists in temp    
+                if (found_highlited_tags[i].toLowerCase() == temp_tags[k].toLowerCase()) {
+                    exists = true; //exists in both 
+                    break;
+                }
+              
+              
+            }
+            if (!exists)
+                $(found_highlited_tags[i]).removeClassName('highlight_sel_tag');
+            
+            exists = false;
+        }
+        found_highlited_tags = temp_tags;
+    
+    }
+    <%end%>
+    
+    function debug(text) {
+        if (true) return;
+        var text_area_text = text+'\n';
+        text_area_text += $('debug').value
+        $('debug').value = text_area_text;
+    }
+        
+        
+        
+    //]]>
+    
+</script>

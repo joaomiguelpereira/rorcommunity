@@ -1,0 +1,43 @@
+<%n_links = Post.get_count_submited_for_user(user_list_row.id)%>
+
+<div id="table_row_wrapper<%=user_list_row.id%>" class="table_row">
+
+    
+    <div>
+    
+        <ul  id="table_row_<%=user_list_row.id%>" onmouseover="flash_highlight_table_row(this)" onmouseout="flash_highlight_table_row(this)" onclick="clicked_table_row(this,true)">
+            <li class="table_cell first">
+            
+                 <a style="width:120px;" title="Rank: <%=user_list_row.rank%>; &uacute;ltimo post, coment&aacute;rio ou voto &agrave; <%=date_formatter(user_list_row.last_activity)%> atr&aacute;s" href="javascript:void(0)"><%=truncate(user_list_row.screen_name,85,"...")%></a>
+                  
+            </li>
+            
+            <li class="table_cell">
+                
+                  <a style="width:40px;padding-left:15px;"  title="Rank: <%=user_list_row.rank%>; &uacute;ltimo post, coment&aacute;rio ou voto &agrave; <%=date_formatter(user_list_row.last_activity)%> atr&aacute;s" href="javascript:void(0)"><%=n_links%></a>                
+               
+            </li>
+                            
+
+            <li class="table_cell">
+                <a style="width:40px;padding-left:15px;" title="Rank: <%=user_list_row.rank%>; &uacute;ltimo post, coment&aacute;rio ou voto &agrave; <%=date_formatter(user_list_row.last_activity)%> atr&aacute;s" href="javascript:void(0)"><%=UserFriends.count_friends(user_list_row.id)%></a>                
+            </li>
+            
+            <li class="table_cell">
+                <a style="width:40px;padding-left:15px;" title="Rank: <%=user_list_row.rank%>; &uacute;ltimo post, coment&aacute;rio ou voto &agrave; <%=date_formatter(user_list_row.last_activity)%> atr&aacute;s" href="javascript:void(0)"><%=user_list_row.rank%></a>
+             </li>
+            
+
+            <li class="table_cell ">
+                    <a  style="width:85px;padding-left:15px;" title="Rank: <%=user_list_row.rank%>; &uacute;ltimo post, coment&aacute;rio ou voto &agrave; <%=date_formatter(user_list_row.last_activity)%> atr&aacute;s" href="javascript:void(0)"><%= to_day_month_abbr(user_list_row.activated_at) %></a>
+               
+            </li>
+            
+
+        </ul>
+      
+              
+    </div>
+    
+    
+</div>

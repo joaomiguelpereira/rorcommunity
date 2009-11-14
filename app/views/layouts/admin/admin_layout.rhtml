@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>Administration :: <%=controller.action_name%></title>
+        <%=stylesheet_link_tag 'admin'%>
+    </head>
+    
+    <body>
+        <%= render_component(:controller =>"admin/menu", :action=>"get_header")%>
+        <%= @content_for_layout%>
+    </body>
+
+</html>

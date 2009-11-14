@@ -1,0 +1,16 @@
+Viva <%=@user.screen_name%>,
+
+Tu, ou alguém a fazer-se passar por ti, pediu que a tua password em <%=BaseHelper.get_message("service.name")%> fosse recuperado. 
+
+Para definir uma nova password envia-mos esta chave de recuperação de password, que deves copiar e introduzir na página de recuperação de password.
+
+Chave para recuperação da password: <%=@user.retrieve_pwd_key%>
+
+Em alternativa podes utilizar o seguinte link para proceder à recuperação da password:
+
+<%=@url%>
+
+
+Obrigado,
+
+A equipa do Logo

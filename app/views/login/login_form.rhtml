@@ -1,0 +1,73 @@
+<h2>Entrar em Orkut</h2>
+
+<p class="first" style="font-size: 115%; line-height: 1.6;">
+<%=BaseHelper.get_message("login.login.dont_have_account_yet")%>
+<strong>
+
+
+<%= link_to BaseHelper.get_message("login.login.join_now"), register_url%>
+</strong>.
+<%=BaseHelper.get_message("login.login.why_register")%></p>
+
+<p class="first" style="font-size: 115%; line-height: 1.6;">
+
+Podes utilizar a tua identidade <strong>OpenID</strong> 
+para acederes aos servi&ccedil;os do Blorkut. Queres <strong>
+	<a href="<%=url_for(:controller=>"openidsession",:action=>"openidlogin")%>">entrar com OpenID<img src="/images/open_id_a.gif" alt="OpenID" border=0/></a></strong>? Ou <a href="">aprender mais sobre OpenID</a>?</p>
+
+<fieldset style="width: 650px;">
+<legend><%=BaseHelper.get_message("login.login.fieldset_leggend")%></legend>
+<%= form_tag(:controller=>"user", :action => "lost_password") %>  
+  <fieldset style="float: right;">
+    <legend><%=BaseHelper.get_message("login.login.lost_your_password")%></legend>
+    <div class="form-large">
+        <label for="lost_user_email" accesskey="9"><%=BaseHelper.get_message("login.login.lost_your_password_your_email")%></label>
+        <%= text_field 'lost_user', 'email' , 'size' => 25, 'title' => BaseHelper.get_message("login.login.label.email"), 'tabindex'=>6%>
+        
+    </div>    
+
+    <%= submit_tag BaseHelper.get_message("login.login.lost_your_password_retrieve_password"), {:class=>"form_button", :tabindex=>"7", :title=>BaseHelper.get_message("login.login.lost_your_password_retrieve_password")}%>
+  </fieldset> <!--End field set Lost Password-->
+<%= end_form_tag -%>
+  
+
+<div>  
+<%= form_tag(:action => "login") %>
+<div class="form-large">
+    <!--Start login form-->
+    
+        <label for="user_email"><%=BaseHelper.get_message("login.login.label.email")%> ou OpenID<img src="/images/open_id_a.gif" alt="OpenID" border=0/></label>
+        <%= text_field 'user', 'email' , 'size' => 25, 'onkeyup'=>'detect_open_id(this,"user_password","user_password_label")', 'title' => BaseHelper.get_message("login.login.label.email"), 'tabindex'=>1%>
+        
+        
+        <label for="user_password" id="user_password_label"><%=BaseHelper.get_message("login.login.label.password")%></label>
+        <%= password_field 'user', 'password','size' => 25 ,'title' => BaseHelper.get_message("login.login.label.password"), 'tabindex'=>2%>
+        
+    <div style="margin-top:10px; margin-bottom:10px;">
+        <label for="user_session_persistent" class="form-checkbox-label"><%=BaseHelper.get_message("login.login.label.persistent_session")%></label> 
+        <%= check_box 'user','session_persistent', 'title' => BaseHelper.get_message("login.login.label.persistent_session"),'tabindex' =>3,'class'=>'form-checkbox'%>
+        
+        <%#help_for("remember","help001")%>
+    </div>
+    <!--End login form-->
+    
+</div>
+
+<div class="fieldset-footer">
+    <%= submit_tag BaseHelper.get_message("login.login.login"), {:class=>"form_big_button", :tabindex=>"4", :title=>BaseHelper.get_message("login.login.login")}%>
+    
+    <input title="<%=BaseHelper.get_message("login.login.cancel_login")%>" class="form_big_button" type="button" tabindex="5" value="<%=BaseHelper.get_message("login.login.cancel_login")%>" onclick="window.location='/'"/>
+</div>
+
+<%= end_form_tag -%>
+</div>
+</fieldset>
+
+<%= 
+#This block hides the login link and put the focus on email field
+#Clear password
+javascript_tag "$('user_email').focus();$('login_top_form_link').hide();$('user_password').value =''"
+
+%>
+
+

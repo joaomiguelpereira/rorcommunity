@@ -1,0 +1,270 @@
+.clear-search { height: 50px; }
+
+.warning div, .positive div { height: 35px; }
+
+#container { width: 960px; }
+
+#contents { width: 940px; }
+
+#wrapper { height: 500px; }
+
+#footer { height: 160px; }
+
+.inline-warning { height: 9em; background: url(/images/matte.gif); }
+
+.side-header { height: 33px; }
+
+.side-container { height: 1px; }
+
+.join {
+    height: 2em;
+}
+
+.news-full {
+    margin-top: 20px;
+}
+
+.side-container .news-summary, .p-archive .news-summary { height: 37px; float: none; }
+
+.extra-nav { height: 1px; overflow: visible; }
+ 
+#communityers .pages {
+	position: relative;
+    top: -15px;
+}
+
+.news-summary {
+    margin: 0;
+    padding-bottom: 1em;
+    height: 80px;
+}
+
+.sub-menu { height: 2em; }
+
+a.toplinep { color: #578CCA !important; }
+
+.thumb span { background: url(/images/thumb-back.gif); }
+
+.thumb-image span { background: url(/images/thumb-back-plain.gif); }
+
+.help div { height: 35px; }
+
+h3 a {
+	text-decoration: underline !important; 
+	background: none !important;
+}
+
+#footer a {
+	text-decoration: underline !important; 
+	background: none !important;
+}
+
+#top_ad {
+	height: 90px;
+}
+
+li.community-it, li.uncommunity-it, li.buried-it, li.dugg-it {
+    margin-top: 6px;
+}
+
+.labs-img {
+    margin: 0;
+    position: relative;
+    top: -20px;
+    right: -20px;
+}
+
+.p-archive .p-summary, .side-container .p-summary {
+    height: 50px !important;
+}
+
+.comment ol li { height: 15px; width: 630px; }
+.comment ol li li { width: 610px; }
+
+.c-body {
+    height: 25px;
+}
+
+.c-body-inside {
+    width: 610px;
+}
+
+.news-full .news-details dl {
+    margin: 0 0 1em 0;
+    float: none;
+}
+
+/*** Podcasts ***/
+
+* html .p li.community-it, * html .p li.uncommunity-it, * html .p li.dugg-it, * html .p li.buried-it { margin-left: 0.2em; }
+
+* html .news-body { height: 60px; }
+
+#wrapper {
+	background: url(/images/main-back.gif) 0 0 no-repeat !important;
+}
+
+#contents {
+	background: url(/images/main-back.gif) 100% 0 no-repeat !important;
+}
+
+.podcasts-header, .podcasts-nav {
+    background: none !important;
+}
+
+.podcasts-header .news-summary .news-community {
+    background-image: url(/images/shade.gif);
+}
+
+.podcasts-nav li, .podcasts-nav span, .podcasts-nav a {
+    background-image: url(/images/tab-back.png) !important;
+    border-color: #ccc !important;
+}
+
+.podcasts-nav {
+    background: url(/images/tab-line.gif) bottom repeat-x !important;
+    margin-left: 0;
+    padding-right: 0;
+}
+
+.podcasts-nav a {
+    border-color: red !important;
+}
+
+.info a {
+    position: relative;
+    height: 1px;
+}
+
+#sub-nav li.active a, #sub-nav li.active span, .extra-nav li.active a, .extra-nav li.active span {
+	/*background: url(/images/tab-back.png) 0 0 !important; /*imp for ie6*/*/
+}
+
+h3 a.ext-link {
+    background: url(/images/bullet-link-plain.gif) 100% 100% no-repeat !important;
+    display: block;
+}
+
+.podcasts-header h3 a.ext-link {
+    background-image: url(/images/bullet-link.gif) !important;
+}
+
+
+.form_button{
+	padding-top:2px;
+	padding-left:2px;
+	padding-right:2px;
+}
+#wrapper fieldset {
+    padding:7px;
+}
+
+.fieldset-footer {
+	
+	left: -8px;
+	top: 7px;
+}
+
+.form-large .check-it-button {
+	height:inherit !important;
+	
+}
+
+.registration-form  fieldset{
+	
+	width: 50%;
+
+}
+.comment-content {
+	margin-left:8px;
+	padding-right:2px;
+}
+
+
+/*.right-comment-body {
+	background:#fff url(/images/comment-right.jpg) no-repeat right top;
+	margin-right:-20px;
+	float:right;
+	width:50px;
+}*/
+.comment-user-photo {
+	margin-top:-2px;
+}
+.comment-bottom {
+	
+	float:right;
+	margin-right:-9px;
+
+
+}
+.new_comment_text_area {
+	
+	border:1px solid #999999;
+	
+	
+}
+
+.comment-info {
+	position:relative;
+	margin-top:-15px;
+	margin-left:7px;
+	margin-right:2px;
+	
+	width:100%;
+}
+
+.comment-answer-content {
+	
+	padding-right:0px;
+	margin-bottom:10px;
+	
+}
+
+.new_comment_text_area {
+	position:relative;
+	border:1px solid #999999;
+	width:100%;
+	overflow:auto;
+	
+	
+}
+
+.comment-form input{
+	padding: 3px 1px !important;
+ 
+}
+
+
+.comment-top-tool {
+	margin-right:-1px;
+	
+}
+.select_box {
+	margin-top:2px;
+}
+
+.sidebar {
+	margin-right:0;
+	height:100%
+	
+}
+
+
+
+
+.tool.rss {
+	background: url(/images/rss-icon.gif) 10px 55% no-repeat;	
+
+	padding-left:30px;	
+}
+.tool.rss a {
+	display:block;
+}
+.tool.rss.second {
+	background: url(/images/rss-icon.gif) 10px 55% no-repeat;	
+	padding-left:30px;	
+	
+}
+
+
+

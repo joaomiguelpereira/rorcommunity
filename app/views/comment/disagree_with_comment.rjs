@@ -1,0 +1,27 @@
+if @logged
+  
+  page.visual_effect :fade, "comment_agreement_link_"+@comment_id 
+  class_name = "comment_votes"
+  page.delay(1) do
+     
+    page.replace_html "comment_agreement_link_"+@comment_id, "<span class=\"disagree\" style=\"color:#990000\">Eu n&atilde;o concordei com este coment&aacute;rio</span>"
+    page.visual_effect :appear, "comment_agreement_link_"+@comment_id
+    
+    page.replace_html "comments_number_of_votes_"+@comment_id,@votes.to_s+" "+pluralize_votes(@votes)+" "
+    if @votes > 0
+      class_name = "comment_votes_positive"
+    end
+    
+    if @votes < 0
+      class_name = "comment_votes_negative"
+    end
+    page["comments_number_of_votes_"+@comment_id].className = class_name
+    
+    
+  end
+else
+  #create an alert box
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Queres participar e concordar com este coment&aacute;rio?",register_url,login_url);
+end

@@ -1,0 +1,16 @@
+
+
+<!--Login Box-->
+<%= form_tag(:action => "login") %>
+	<!--In case you want openId-->
+	
+    <label for="user_email"><%=BaseHelper.get_message("login.login.label.email")%> ou <a href="" class="open_id">OpenID</a></label>
+    <%= text_field 'user', 'email', 'tabindex' =>1,'size' => 25, 'onkeyup'=>'detect_open_id(this,"user_password","user_password_label")','title' => BaseHelper.get_message("login.login.label.email")  %>
+    <label for="user_password" id="user_password_label"><%=BaseHelper.get_message("login.login.label.password")%></label>
+    <%= password_field 'user', 'password','tabindex' =>2,'size' => 25 ,'title' => BaseHelper.get_message("login.login.label.password")  %>
+    <label for="user_session_persistent"><%=BaseHelper.get_message("login.login.label.persistent_session")%></label>
+    <%= check_box 'user','session_persistent', 'title' => BaseHelper.get_message("login.login.label.persistent_session"),'tabindex' =>3,'class'=>'form-checkbox'%>
+ 
+ <%= submit_tag BaseHelper.get_message("login.login.login"), {:class=>"form_button", :tabindex=>"4",:title=>BaseHelper.get_message("login.login.login")}%>
+<%= end_form_tag -%>
+

@@ -1,0 +1,12 @@
+page.visual_effect :appear, "user_location_map"
+
+page.delay(1) do
+  function_call = ""
+  function_call = "load_google_map" 
+  page.call(function_call);
+end
+
+html =" <a href=\"javascript:void(0)\" onclick=\"find_location_in_map()\">encontrar no mapa</a> "
+html += link_to_remote("(esconder mapa)",:url=>{:controller=>"google_map", :action=>"hide_user_map"},:loading=>"showWaiting()",:complete=>"hideWaiting()")
+page.replace_html "view_map_link", html
+
