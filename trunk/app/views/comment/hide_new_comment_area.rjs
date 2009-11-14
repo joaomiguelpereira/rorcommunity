@@ -1,0 +1,15 @@
+if @logged
+  page.visual_effect :fade, "new_comment_wrapper_"+@post_id
+   
+    page.delay(1) do
+     page.visual_effect :appear,'insert_comment'
+     page.visual_effect :appear,'no_comments_yet' 
+  end
+  page.remove("new_comment_wrapper_"+@post_id)
+  
+else
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Queres deixar o teu coment&aacute;rio?",register_url,login_url);
+  
+end

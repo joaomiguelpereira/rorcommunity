@@ -1,0 +1,253 @@
+
+<%show_map = false%>
+<%= navigation_user_profile("view_public_profile",@user) %>
+<br style="clear:both;"/>
+
+<div class="user_posts_tip">&nbsp;</div>
+<div class="sidebar"> 
+<div class="profile-right-box">
+  
+ 
+  
+
+
+    <!-- kk -->
+    
+      <div id="user_channels-title" class="expandable-title-expanded"><a href="javascript:void(0)" onclick="show_hide('user_channels')">Canais</a></div>
+        <div class="small_stats" id="user_channels">
+            <%=render_user_top_channels(@user.id)%>
+    </div>
+    
+    
+    <!-- kk -->  
+  
+  
+  
+  <div id="user_stats-title" class="expandable-title-colapsed"><a href="javascript:void(0)" onclick="show_hide('user_stats')">Estat&iacute;sticas do utilizador</a></div>
+  
+  
+  <div class="small_stats" style="display:none" id="user_stats">
+  <ul>
+    <li title="Quantos links o <%=@user.screen_name%> submeteu">Links submetidos: <%=Post.get_count_submited_for_user(@user.id)%></li>
+    <li title="Quantos coment&aacute;rios o <%=@user.screen_name%> fez">Coment&aacute;rio que fez: <%=Comment.count_comments_for_user(@user.id)%></li>
+    <li title="Quants respostas a coment&aacute;rios o <%=@user.screen_name%> fez">Respostas que fez a coment&aacute;rios: <%=CommentAnswer.count_comments_answers_for_user(@user.id)%></li>
+    <li title="Quantas vezes o <%=@user.screen_name%> votou em links">Votos em links: <%=UserVote.count_votes_for_user(@user.id)%></li>
+    <li title="Quantas vezes o <%=@user.screen_name%> votou em coment&aacute;rios"> Votos em coment&aacute;rios: <%=CommentVote.count_comments_votes_for_user(@user.id)%></li>
+    <li title="Quantas vezes o <%=@user.screen_name%> votou em respostas a coment&aacute;rios">Votos em respostas a coment&aacute;rios: <%=AnswerVote.count_comments_answers_votes_for_user(@user.id)%></li>
+  </ul>
+  
+  </div>
+  
+  <div id="user_link_stats-title" class="expandable-title-colapsed"><a href="javascript:void(0)" onclick="show_hide('user_link_stats')">Estat&iacute;sticas dos links submetidos</a></div>
+  <div class="small_stats" style="display:none" id="user_link_stats">
+  <ul>
+    <li title="Quantas votos receberam os links submetidos pelo <%=@user.screen_name%>">N&uacute;mero total de votos : <%=Post.count_votes_on_user_links(@user.id)%></li>
+    <li title="Quantos utilizadores submeteram os mesmos links que o <%=@user.screen_name%>">Utilizadores que submeteram os mesmos links: <%=Post.count_user_submited_links_duplicated(@user.id)%></li>
+    <li title="Quantos coment&aacute;rios foram feitos ao links submetidos pelo <%=@user.screen_name%>">N&uacute;mero de Coment&aacute;rios: <%=Comment.count_comments_on_user_links(@user.id)%></li>
+    <li>N&uacute;mero de respostas a coment&aacute;rios: <%=CommentAnswer.count_comments_answer_on_user_links(@user.id)%></li>
+  </ul>
+  </div>
+  
+</div>
+</div> <!--end sidebar-->
+<br/>
+
+<div class="profile-view-main">
+ <table class="public_profile_table">
+            
+			<%if !@user.open_id_url.nil?%>
+            <tr>
+                <td class="read_only_field_label">Identidade OpenID</td>
+                <td class="view_only_field"><%= @user.open_id_url %></td>
+            </tr>
+			
+			<%end%>
+            <tr>
+                <td class="read_only_field_label"><%= BaseHelper.get_message("register.screen_name")%></td>
+                <td class="view_only_field"><%= @user.screen_name  %></td>
+            </tr>
+            
+            <tr>
+                <td class="read_only_field_label">Nome</td>
+                <td class="view_only_field">
+                    <%unless @user.first_name.nil? && @user.first_name.nil? %>
+                        <%if @user.first_name.size() > 0 || @user.last_name.size() > 0%>
+                            <%= @user.first_name %> <%= @user.last_name %>
+                        <%else%>
+                            <span style="font-size:105%;font-weight:normal;">[N&atilde;o introduzido]</span>
+                        <%end%>
+                    <%else%>
+                        <span style="font-size:105%; font-weight:normal;">[N&atilde;o introduzido]</span>
+                    <%end%>
+					<a href="<%=url_for :controller=>"user", :action=>"edit_profile"%>"  class="link_small_info ">editar</a>
+                </td>
+            </tr>      
+            <tr>
+                <td class="read_only_field_label">Website</td>
+                <td class="view_only_field">
+                
+                <%if !@user.website.nil? && @user.website.size() > 0%>
+                    <a target="_blank" href="<%= @user.website%>"><%= @user.website%></a>
+                <%else%>
+                    <span style="font-size:105%; font-weight:normal;">[N&atilde;o introduzido]</span>
+                 <%end%>
+				 <a href="<%=url_for :controller=>"user", :action=>"edit_profile"%>"  class="link_small_info ">editar</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="read_only_field_label">Membro desde</td>
+                <td class="view_only_field"><%= to_day_month(@user.created_at)  %></td>
+            </tr>
+            
+            <tr>
+                <td class="read_only_field_label">Local</td>
+                <td class="view_only_field">
+                    <%if !@user.localization.nil? && @user.localization.size() > 0%> 
+                        <%= @user.localization%>
+                    <%else%>
+                        <span style="font-size:105%; font-weight:normal;">[N&atilde;o introduzido]</span>
+                    <%end%>
+                    <a href="<%=url_for :controller=>"user", :action=>"edit_profile"%>"  class="link_small_info ">editar</a>
+                </td>
+            </tr>
+       
+  </table>
+
+   <%if !@user.localization.nil? && @user.localization.size() > 0 && !@user.gmap_lat.nil? && @user.gmap_lat.size() > 0 && !@user.gmap_long.nil? && @user.gmap_long.size() > 0%>        
+    <%=render_component :controller=>"google_map", :action=>"map", :params => {:user_id=>@user.id, :read_only=>1 }%>    
+    <%show_map = true%>
+    <div id="user_location_map"></div>
+   <%end%>
+               
+</div>    
+
+
+
+    
+    <script type="text/javascript">
+    //<![CDATA[
+
+       function show_hide(name) {
+            
+            if ($(name).visible()) {
+                $(name+'-title').className = 'expandable-title-colapsed';
+                new Effect.Fade($(name));
+            } else {
+                new Effect.Appear($(name));
+                $(name+'-title').className = 'expandable-title-expanded';
+            }
+            
+            
+        }             
+        
+
+
+    //whacth event 
+    Event.observe(window, 'load', function() {
+        Event.observe(window, 'click', do_window_click);
+    });
+
+    var context_menu = {
+        context_menu_active:null,
+        last_click_opened:false,
+        get_active_context_menu: function () {
+            return this.context_menu_active;
+        },
+        
+        set_active_context_menu:function(acv) {
+            this.context_menu_active = acv;
+        },
+        getLastClickedOpened:function() {
+            return this.last_click_opened;
+        },
+        setLastClickedOpened:function(last_opened) {
+            this.last_click_opened = last_opened;
+        }
+        
+        
+    }
+    
+    function do_window_click() {
+        if (context_menu.getLastClickedOpened() != true) {
+       
+       
+       
+            if ( context_menu.get_active_context_menu()!=null ) {
+	           
+	               old_menu = $('channel_option_div_'+context_menu.get_active_context_menu().id)
+	               new Effect.Fade(old_menu);
+	           
+	         }
+            
+            
+            
+       }
+        context_menu.setLastClickedOpened(false);
+    }
+    
+    
+    function open_feed_context_menu(what) {
+	   //clear all opened menus
+	   
+	   //verify if any is open
+	  
+	   
+	   
+	   if (context_menu.get_active_context_menu()!=null) {
+	       
+	       if ( context_menu.get_active_context_menu().id == what.id ) {
+	           //alert("will do nothing");
+	       } else {
+	           old_menu = $('channel_option_div_'+context_menu.get_active_context_menu().id)
+	           new Effect.Fade(old_menu);
+	       }
+	   }
+	   
+	   parent_id = what.id;
+	
+	   
+	   dropdown_element = $('channel_option_div_'+parent_id)
+	  
+	  
+	   Position.clone(parent_id,dropdown_element);
+	   left = dropdown_element.style.left;
+	
+	   left_n = left.split('px')[0];
+	
+	   left_n = left_n - 100;
+	
+	
+	   dropdown_element.style.left = left_n+'px';
+
+	   new Effect.Appear(dropdown_element);
+	   context_menu.set_active_context_menu(what);
+	   
+	   context_menu.setLastClickedOpened(true);
+	   
+	   
+       //alert(context_menu_active);
+       
+        
+    }
+    
+    //]]>
+
+</script>
+
+<%if show_map%>
+
+    <script type="text/javascript">
+    //<![CDATA[
+        Event.observe(window, 'load', function() {
+            load_google_map();
+            
+        });
+        
+    
+    
+    //]]>
+
+</script>
+    
+<%end%>

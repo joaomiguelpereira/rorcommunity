@@ -1,0 +1,145 @@
+<%= javascript_include_tag "user_selection_dialog" %>
+<script type="text/javascript">
+//<![CDATA[
+    //-----------
+    
+    var the_tags = $H({<%=render_linkable_tag_to_add_filter[1]%>});
+    
+      //]]>
+</script>
+<%= javascript_include_tag "rss_create_channel" %>
+
+
+<div id="errors_area" class="warning" style="display:none">
+<div>Ocorreram alguns erros durante a valida&ccedil;&atilde;o.<br/>Por favor verifica a informa&ccedil;&atilde;o! submetida</div></div>
+
+<h1 class="big">Criar feed personalizada<span style="font-size:70%; color:#999999"> - Passo 1 de 2</span></h1>
+<br style="clear:both"/>
+
+
+
+
+<fieldset>
+
+
+<%=form_remote_tag(:url=>{:controller=>"post", :action=>"save_feed_channel"},:loading=>"showWaiting()",:complete=>"hideWaiting()")%>
+<div class="sidebar">
+        <div class="profile-right-box" style="margin-top:20px">
+            <div id="filter_summary-title" class="expandable-title-expanded"><a href="javascript:void(0)" onclick="show_hide('filter_summary')">Sum&aacute;rio</a></div>
+            <div id="filter_summary">
+                Feed <span id="summary_feed_name"><b>[sem nome]</b></span>, <br/>
+                 D&aacute;-me os posts <span id="order_summary_filter"><b>mais populares das &uacute;ltimas 24 horas</b></span>, <span id="tags_summary_name"></span><span id="tags_summary_tags"></span><span id="summary_users"> de <b>todos os utilizadores</b></span>
+            </div>
+        </div> 
+</div>
+
+<legend>Detalhes dos Links</legend>
+<div class="form-large">
+    <%= hidden_field 'rss_channel', 'order_by', :value=>"Populares" %>
+    <%= hidden_field 'rss_channel', 'limit_popular_by',:value=>"Top 24 horas" %>
+     <div>
+        <span class="tool"><a href="javascript:void(0)" onclick="change_order(this)">Mais recentes</a></span>
+        <span class="tool selected">Populares</span>
+        <span class="tool"><a href="javascript:void(0)" onclick="change_order(this)">Menos populares</a></span>
+     </div>
+    <br style="clear:left"/>
+    <div id="child_pop_menu">
+        <span class="tool selected">Top 24 horas</span>
+        <span class="tool"><a href="javascript:void(0)" onclick="change_order(this)">Top 7 dias</a></span>
+        <span class="tool"><a href="javascript:void(0)" onclick="change_order(this)">Top 30 dias</a></span>
+        <span class="tool"><a href="javascript:void(0)" onclick="change_order(this)">Top 365 dias</a></span>
+    </div>
+    <br style="clear:left"/>        
+    
+    
+    
+    <label for="rss_channel_name">Nome da nova feed <span class="required">(Obrigat&oacute;rio)</span></label>
+    <%= text_field 'rss_channel', 'name' , 'size' => 70, 'maxlength'=>'30', 'title' => "Introduz o nome para o novo canal", 'tabindex'=>1, 'onkeyup'=>'update_summary()','onfocus'=>'show_helper()'%>
+    <%= error_for @rss_channel, 'name' %>
+    <div id="rss_channel_name_error" style="display:none" class="fieldWithErrors">fdgdf</div>
+    
+    <label for="rss_channel_filter_tags">Tags a filtrar</label>
+                
+    <%= hidden_field 'rss_channel', 'tags_operator', 'value'=>'1' %>
+        
+    <%= text_area 'rss_channel', 'filter_tags' , 'cols'=>80,'rows'=>2, 'title' => "Tags", 'tabindex'=>2, 'onkeyup'=>'do_auto_search(this)', 'onfocus'=>'show_helper(\'avaiable-tags\')' %>
+    <br style="clear:both"/>
+    <span class="form-tip">As tags devem ser separadas por espa&ccedil;os.</span>
+    <span class="required">(utilizar <select id="tags_operator" onchange="update_tags_operators()" ><option value="1">Ou</option><option value="2">E</option></select>como operador)</span>
+    <div id="autocomplete">&nbsp;</div>
+        
+    <div id="tag_cloud">
+            <div id="avaiable-tags-title" class="expandable-title-colapsed" style="font-size:80%"><span class="fixed">Tags dispon&iacute;veis</span></div>
+
+            <div id="avaiable-tags-container" class="proposed_tags" style="display:none; margin-right:300px;">        
+        
+                <span id="tag_container_cloud" style="font-weight:normal"><%=render_linkable_tag_to_add_filter[0]%></span>
+                <div class="user_tags_option">ordenar tags por:
+
+                <%
+                    #hack #92828
+                    freq_selected = "selected"
+                    alpha_selected = ""
+                    
+                    
+                    if session[:the_active_order_for_label_new_channel]
+                        if session[:the_active_order_for_label_new_channel] == "alpha"
+                            alpha_selected = "selected"
+                            freq_selected = ""
+                        end 
+                    end
+                
+                %>
+
+
+                        <a class="clear-bg <%=freq_selected%>" id="re_order_freq" href="javascript:void(0)" onclick="reorder_tag_cloud('freq')">frequ&ecirc;ncia</a>
+                        <a class="clear-bg <%=alpha_selected%>" id="re_order_alpha" href="javascript:void(0)" onclick="reorder_tag_cloud('alpha')">ordem alfab&eacute;tica</a>
+                
+                </div>
+                
+                <% if session[:logged_user] 
+                    #hack #92828
+                    all_selected = "selected"
+                    network_selected = ""
+                    
+                    
+                    if session[:the_active_filter_for_label_new_channel]
+                        if session[:the_active_filter_for_label_new_channel] == "network"
+                            network_selected = "selected"
+                            all_selected = ""
+                        end 
+                    end
+                
+                %>
+                <div class="user_tags_option">ver :
+                        <a class="clear-bg <%=all_selected%>" id="re_filter_all" href="javascript:void(0)" onclick="reorder_tag_cloud_filter('all')">todas as tags</a>
+                        <a class="clear-bg <%=network_selected%>" id="re_filter_network" href="javascript:void(0)" onclick="reorder_tag_cloud_filter('network')">tags da minha rede</a>
+                
+                </div>
+                <%end%>
+            </div>
+        </div>
+
+        <label for="rss_channel_use_groups">Ver apenas dos utilizadores</label>
+        
+        <%= text_area 'rss_channel', 'use_groups' , 'value'=>'[ todos ]','cols'=>80,'rows'=>2, 'title' => "Tags",'tabindex'=>2, 'onfocus'=>'show_helper()' %>
+        <br style="clear:left"/>
+        <span class="form-tip"><a class="selected" href="javascript:void(0)" onclick="swap_users(this,'users_selection.use_all_users()') " id="show_users_all">todos</a></span>
+        <%if session[:logged_user]%>
+        <span class="form-tip"><a href="javascript:void(0)" onclick="swap_users(this,'users_selection.use_my_network_users()')" id="show_users_network">a minha rede</a></span>
+        <%end%>
+        <span class="form-tip"><a id="show_users_personalized" href="javascript:void(0)" onclick="open_user_selection_dialog();swap_users(this);">personalizado</a></span>
+        
+        
+    
+</div>
+
+<div class="fieldset-footer">
+        
+            <%= submit_tag "Continuar &gt;&gt;", {:class=>"form_big_button", :tabindex=>"4", :title=>"Continuar"}%>
+        <%= end_form_tag -%>
+</div>
+
+</fieldset>
+
+

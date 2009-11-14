@@ -1,0 +1,3 @@
+#page.alert @page+" -- "+@id
+
+page.replace_html "_idiv_"+@id, render("helpers/"+@page)

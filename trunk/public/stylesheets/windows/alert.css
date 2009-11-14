@@ -1,0 +1,98 @@
+.overlay_alert {
+	background-color: #85BBEF;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+	z-index:1000px;
+}
+
+.alert_nw {
+	/*width: 5px;
+	height: 5px;*/
+	/*background: transparent url(alert/top_left.gif) no-repeat bottom left;			*/
+}
+
+.alert_n {
+
+/*	background: transparent url(alert/top.gif) repeat-x bottom left;			*/
+}
+
+.alert_ne {
+/*	background: transparent url(alert/top_right.gif) no-repeat bottom left			*/
+}
+
+.alert_e {
+/*	background: transparent url(alert/right.gif) repeat-y 0 0;			*/
+}
+
+.alert_w {
+/*	background: transparent url(alert/left.gif) repeat-y 0 0;			*/
+}
+
+.alert_sw {
+/*	background: transparent url(alert/bottom_left.gif) no-repeat 0 0;			*/
+}
+
+.alert_s {
+/*	background: transparent url(alert/bottom.gif) repeat-x 0 0;			*/
+}
+
+.alert_se, .alert_sizer {
+/*	background: transparent url(alert/bottom_right.gif) no-repeat 0 0;			*/
+}
+
+.alert_close {
+}
+
+.alert_minimize {
+}
+
+.alert_maximize {
+}
+
+.alert_title {
+	width:100px;
+	float:left;
+	height:1px;
+	
+}
+
+.alert_content {
+	overflow:visible;
+	color: #000;
+	font-weight:bold;
+/*  	background: #FFF url('alert/progress.gif') no-repeat center center*/
+
+	width:100px;
+}
+
+/* For alert/confirm dialog */
+.alert_window {
+	background: #FFF;
+	
+}
+
+.alert_message {
+
+
+}
+
+.alert_buttons {
+	text-align:center;
+	
+}
+
+.alert_buttons input {
+	
+}
+
+.alert_progress {
+	float:left;
+	margin:auto;
+	text-align:center;
+	
+	height:16px;
+	background: #FFF url('alert/progress.gif') no-repeat center center
+}
+
+

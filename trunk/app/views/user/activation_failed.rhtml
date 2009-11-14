@@ -1,0 +1,20 @@
+<div class="simple_page">
+<div class="warning"><div class="bad_news">Oops!!</div></div>
+<br/>
+
+<p>Ocorreu um erro durante a activa&ccedil;&atilde;o do utilizador com a chave <%=@activation_key%>
+<br/>
+Este erro pode ter sido originado por uma das seguinte raz&otilde;es:
+</p>
+<ul>
+    <li>O utilizador j&aacute; se encontra activo. Tenta fazer <%=link_to "login", login_url %> ou <%=link_to "recuperar", login_url %> a password.</li>
+    <li>A chave de activa&ccedil;&atilde;o pertence a um registo que foi removido da base de dados. A activa&ccedil;&atilde;o da conta tem uma validade de 15 dias</li>
+    <li>A chave de activa&ccedil;&atilde;o &eacute; inv&aacute;lida! Talvez um pedido malicioso? :)</li>
+    <li>Algum erro ocorreu sem motivo aparente. Tenta outra vez ou contacta o administrador.</li>
+</ul>
+
+<p>Se ainda n&atilde;o est&aacute;s registado <span style="font-size:200%;"><%=link_to "regista-te", register_url%></span> agora</p>
+
+
+
+</div>

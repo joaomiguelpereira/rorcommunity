@@ -1,0 +1,52 @@
+<%
+ saved_by = Post.count_saved_by(user_voted_link.post.link_url)
+ number_of_votes = user_voted_link.post.votes
+ #number_of_comments = user_voted_link.post.comments.count
+ rank = user_voted_link.post.rank
+ number_of_comments = user_voted_link.post.comments
+ link_details_url = post_url(:permalink=>user_voted_link.post.permalink)
+ image_tag = "<img src=\"/images/iagree.gif\" alt=\"positive vote\"/>"
+ if user_voted_link.vote == -1
+  image_tag = "<img src=\"/images/idisagree.gif\" alt=\"negative vote\"/>"
+ end
+%>
+
+<div class="user_link_details" id="link_details_<%=user_voted_link.post.id%>">
+  <div class="user_link_details_title">
+    <a id="title_<%=user_voted_link.post.id%>" href="<%=user_voted_link.post.link_url%>" target="_blank"><%=user_voted_link.post.title%></a>
+  </div>
+  
+  <div class="user_voted_user_info">
+  <div class="user_submited_info_photo">
+  <a href="<%=user_url(:user_screen_name=>user_voted_link.post.user.screen_name)%>" title="Ver o perfil do <%=user_voted_link.post.user.screen_name%>">
+  <img src="<%=user_voted_link.post.user.user_image.small_url%>" alt="<%=h(user_voted_link.post.user.screen_name)%>" width="32" height="32" />
+  </a>
+  </div>
+  <div class="user_submited_info">Submetido por <a href="<%=userposts_url(:user_screen_name=>user_voted_link.post.user.screen_name)%>" title="Ver o perfil do <%=h(user_voted_link.post.user.screen_name)%>"><%= h(user_voted_link.post.user.screen_name) %></a>
+  &agrave;&nbsp;<span class="d"><%= date_formatter(user_voted_link.post.created_at) %></span> atr&aacute;s 
+  (<a target="_blank" rel="nofollow" href="link_details.url_domain"  class="simple"><%= h(user_voted_link.post.url_domain) %></a>)
+  </div>
+  
+  </div>
+  <br style="clear:left"/>
+  <%if !user_voted_link.post.description.nil? && user_voted_link.post.description.size > 0%>
+  
+    <div id="show_desc_div_<%=user_voted_link.post.id%>" style="font-size:100%; margin-bottom:3px;">
+    <%=decode_html(h(user_voted_link.post.description))%>
+    </div>
+    <%end%>
+    <div class="user_link_details_details">
+      <%=image_tag%> Votou &agrave; <span class="d"><%= date_formatter(user_voted_link.voted_at) %> </span> atr&aacute;s |
+      
+       <%if saved_by >0 %><span class="not-first-submited"><a href="<%=savedby_url(:permalink=>user_voted_link.post.permalink)%>">Submetido por <%=saved_by%> <%=pluralize_users(saved_by)%></a></span> | <%end%>
+       <a href="<%=link_details_url%>"><%=number_of_votes%> <%=pluralize_votes(number_of_votes)%></a> |
+       <a href="<%=link_details_url%>#comments"><%=number_of_comments%> <%=pluralize_comments(number_of_comments)%></a>
+       | <span title="A popularidade de um link &eacute; calculada com base no n&uacute;mero de votos, coment&aacute;rios e n&uacute;mero de utilizadores que submeteram o mesmo link.">Popularidade:<%=rank.to_f.round()%></span>
+    </div>
+  
+    <div class="user_link_details_tags">Tags:<%= get_all_labels(user_voted_link.post.link_url) %></div>
+    
+  
+</div>
+
+<br/>

@@ -1,0 +1,44 @@
+
+<% 
+   
+    saved_by = user_link_details.saved_by
+    number_of_votes = user_link_details.votes
+    number_of_comments = user_link_details.comments
+    original = ""
+    link_details_url = post_url(:permalink=>user_link_details.permalink)
+    rank = user_link_details.rank
+    rank = rank.to_f.round()
+    saved_by_class = "first-submited"
+    submited_or_saved = "Gravado"
+    
+    if user_link_details.original=="1"
+        submited_or_saved = "Submetido"
+    
+    else
+        submited_or_saved = "Gravado"
+        saved_by_class = "not-first-submited"
+        end
+%>
+<div class="user_link_details" id="link_details_<%=user_link_details.id%>">
+    <div class="user_link_details_title"><a id="title_<%=user_link_details.id%>" href="<%=user_link_details.link_url%>" target="_blank"><%=user_link_details.title%></a> 
+    <%if session[:logged_user] && session[:logged_user].to_s == user_link_details.user_id.to_s %>
+    <span class="user_link_details_details" style="font-size:60%"><%= link_to "editar", {:controller=>"post", :action=>"edit_link", :id=>user_link_details.id}, :class=>"small_edit"%> | <span class="small_remove"><%= link_to_remote "Remover", :url=>{:controller=>"post", :action=>"confirm_delete_link", :id=>user_link_details.id},:confirm=>"Tens a certeza que queres remover permanentemente o link:\n#{user_link_details.link_url}?", :loading=>"showWaiting()",:complete=>"hideWaiting()"%></span></span> 
+    <%end%>
+    
+    </div>
+    
+    <%if !user_link_details.description.nil? && user_link_details.description.size > 0%>
+    <div id="show_desc_div_<%=user_link_details.id%>" style="font-size:100%; margin-bottom:3px;"><%=decode_html(h(user_link_details.description))%></div>
+    <%end%>
+
+    <div class="user_link_details_details"><%if user_link_details.original=="1"%><img src="/images/first_submited.gif" alt="first_submited"/><%end%><%=submited_or_saved%> &agrave; <span class="d"><%= date_formatter(user_link_details.created_at) %> </span> atr&aacute;s | <%if saved_by >0 %><span class="not-first-submited"><a href="<%=savedby_url(:permalink=>user_link_details.permalink)%>">Submetido por mais <%=saved_by%> <%=pluralize_users(saved_by)%></a></span> | <%end%> <a href="<%=link_details_url%>"><%=number_of_votes%> <%=pluralize_votes(number_of_votes)%></a> | <a href="<%=link_details_url%>#comments"><%=number_of_comments%> <%=pluralize_comments(number_of_comments)%></a>
+ <%if !user_link_details.description.nil? && user_link_details.description.size > 0%>
+        | <a  id="show_desc_link_<%=user_link_details.id%>" href="javascript:void(0)" onclick="show_desc('<%=user_link_details.id%>')">esconder descri&ccedil;&atilde;o</a>
+    <%end%> | <span title="O Rank de um link &eacute; calculada com base no n&uacute;mero de votos, coment&aacute;rios e n&uacute;mero de utilizadores que submeteram o mesmo link.">Rank:<%=rank%></span></div>
+    
+    
+    
+    <div class="user_link_details_tags">Tags:<%=get_user_labels(user_link_details.id)%></div>
+    
+</div>
+<br/>

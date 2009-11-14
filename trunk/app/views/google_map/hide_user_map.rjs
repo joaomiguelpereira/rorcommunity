@@ -1,0 +1,4 @@
+page.visual_effect :fade, "user_location_map"
+
+html = link_to_remote("(ver mapa)",:url=>{:controller=>"google_map", :action=>"show_user_map", :id=>"12"},:loading=>"showWaiting()",:complete=>"hideWaiting()")
+page.replace_html "view_map_link", html

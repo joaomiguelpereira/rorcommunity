@@ -1,0 +1,127 @@
+
+<div class="side-help">
+    <div class="instruction">
+        <div>
+            <h3>Porqu registar-me</h3>
+            <ul class="compact">
+                <li>Porque sim</li>
+                <li>Porque sim</li>
+                <li>Porque sim</li>            
+            </ul>
+
+        </div>
+    </div>
+    <div class="instruction">
+        <div>
+            <h3>A minha info e segura?</h3>
+            <p>Nao. Vamos limpar-te ate ao tutano</p>
+        </div>
+        
+    </div>
+</div>
+
+
+<%= error_messages @user %>
+<h2><%=BaseHelper.get_message("user.register")%></h2>
+
+<p class="first" style="font-size: 115%; line-height: 1.6;">
+Podes utilizar a tua identidade <strong>OpenID</strong> 
+para acederes aos servi&ccedil;os do Blorkut.</p> 
+<p class="first" style="font-size: 115%; line-height: 1.6;">
+Queres <strong>
+	<a href="<%=url_for(:controller=>"openidsession",:action=>"openidlogin")%>">entrar com OpenID<img src="/images/open_id_a.gif" alt="OpenID" border=0/></a></strong>? Ou <a href="">aprender mais sobre OpenID</a>?</p>
+
+<p class="first" style="font-size: 115%; line-height: 1.6;">
+<%=BaseHelper.get_message("register.have_account_already")%>
+<strong>
+<%= link_to BaseHelper.get_message("register.click_here"), login_url%>
+</strong>
+<%=BaseHelper.get_message("register.click_here.to_login")%>
+</p>
+
+<!--Let's start with the form then-->
+<div class="registration-form">
+<%= form_tag(:action => "pre_register") %>
+
+    <fieldset>
+        <legend><%=BaseHelper.get_message("register.user_info")%><span class="all_required">&nbsp;(<%=BaseHelper.get_message("register.all_fields_mandatory")%>)</span></legend>
+        <div class="form-large">
+            <label for="user_email"><%=BaseHelper.get_message("login.login.label.email")%></label>
+            <%= text_field 'user', 'email' , 'size' => 45, 'title' => BaseHelper.get_message("login.login.label.email"), 'tabindex'=>1%>
+            <br/>
+            <span class="form-tip"><%=BaseHelper.get_message("register.email_tip")%></span>
+            <label for="user_email_confirmation">Confirma&ccedil;&atilde;o do email</label>
+            <%= text_field 'user', 'email_confirmation' , 'size' => 45, 'title' => BaseHelper.get_message("login.login.label.email"), 'tabindex'=>2%>
+        
+            <br/>
+             
+            <%= error_for @user, 'email'%>
+            <label for="user_screen_name"><%=BaseHelper.get_message("register.screen_name")%></label>
+            <%= text_field 'user', 'screen_name' , 'size' => 20, 'title' => BaseHelper.get_message("register.screen_name"), 'tabindex'=>3,'onkeyup'=>'enableCheckButton()'%>
+            <%= button_to_function BaseHelper.get_message("register.check.availability"), "checkUniqueness()",
+            :class=>"check-it-button", :id=>"check_availability", :title=>BaseHelper.get_message("register.check.availability_tooltip")%>            
+            <br/>
+            <div id="availability_user_screen_name"></div>
+            <span class="form-tip"><%=BaseHelper.get_message("register.screen_name_tip")%></span>
+            <%= error_for @user, 'screen_name'%>
+            <!--Password-->
+            <br/>
+            <div class="inline">
+                <label for="user_password"><%=BaseHelper.get_message("login.login.label.password")%></label>
+                <%= password_field 'user', 'password' , 'size' => 20, 'title' => BaseHelper.get_message("login.login.label.password"), 'tabindex'=>4%>
+            </div>
+            <div class="inline">
+                <label for="user_password_confirmation"><%=BaseHelper.get_message("login.login.label.password.confirm")%></label>
+
+                <%= password_field 'user', 'password_confirmation' , 'size' => 20, 'title' => BaseHelper.get_message("login.login.label.password.confirm"), 'tabindex'=>5%>
+            </div><!--class="inline"-->
+            <br style="clear:both"/>
+            <span class="form-tip"><%=BaseHelper.get_message("register.password_tip")%></span> 
+            <%= error_for @user, 'password'%>
+        </div><!--form-large-->
+
+    </fieldset>
+    <div class="form_agree">
+        <label for="user_agree" class="form-checkbox-label"><%=BaseHelper.get_message("register.read_the_terms")%></label> 
+        <%= check_box 'user','agree', 'title' => BaseHelper.get_message("register.read_the_terms"),'tabindex' =>6,'class'=>'form-checkbox'%>
+        <%= error_for @user, 'agree'%>
+    </div>
+    
+    <br style="clear:both"/>
+    <%= submit_tag BaseHelper.get_message("common.continue"), {:class=>"form_big_button", :tabindex=>"7", :title=>BaseHelper.get_message("common.continue")}%>
+<%= end_form_tag -%>
+</div><!--registration-form-->
+
+<%#remote_function(:update=>"availability_user_screen_name", :url=>{:controller=>:user, :action=>:check_availability, :screen_name_tmp=>"2"} )%>
+<%=
+javascript_tag "
+$('user_email').focus();
+$('register_top_link').hide();
+$('check_availability').disable();
+
+function enableCheckButton() {
+    if( $('user_screen_name').value != '' && $('user_screen_name').value.length > 3) 
+        $('check_availability').enable();
+
+    else 
+        $('check_availability').disable();
+
+$('user_screen_name').focus();
+
+if ( $('availability_user_screen_name').visible() ) {
+    $('availability_user_screen_name').update('');
+    $('availability_user_screen_name').hide();
+}
+    
+
+
+return false;
+}
+function checkUniqueness() {
+    var username = $('user_screen_name').value;
+    $('availability_user_screen_name').show()
+    new Ajax.Updater('availability_user_screen_name', '/user/check_availability?screen_name_tmp='+username, {asynchronous:true, evalScripts:true});
+
+}
+
+"%>

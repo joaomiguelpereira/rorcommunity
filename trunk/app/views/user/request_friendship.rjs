@@ -1,0 +1,25 @@
+if @already_fan
+  function_call = ""
+  function_call = "show_alert" 
+  page.call(function_call,"Ja &eacute;s f&atilde; ou amigo do <strong>#{@user.screen_name}!</strong>!!");
+  
+  return
+  
+end
+
+if @logged
+  
+
+  function_call = ""
+  function_call = "show_alert" 
+  page.call(function_call,"O teu pedido foi entregue com sucesso!<br/>O <strong>#{@user.screen_name}</strong> foi notificado para te aceitar na rede dele!<br/>At&eacute; l&aacute; &eacute;s  f&atilde; do <strong>#{@user.screen_name}</strong>!");
+  
+  #fan_
+  
+  
+else
+
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Vem fazer parte desta comunidade.",register_url,login_url);
+end

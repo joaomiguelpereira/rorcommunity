@@ -1,0 +1,3 @@
+
+
+page.replace_html "inline_container_content", (render :partial=>"select_user_email")

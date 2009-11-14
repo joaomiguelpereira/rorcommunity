@@ -1,0 +1,30 @@
+<%=render_front_page_extra_nav("list_channels")%>
+
+
+<!--render side bar-->
+<%=side_bar()%>
+    
+<%=end_side_bar()%>
+
+<br style="clear:left"/>
+<div class="front-page-filtering">
+
+    <%=list_channels_ordering_options%>    
+    
+   
+    
+</div>
+<br style="clear:left"/>
+<br style="clear:left"/>
+
+<div class="main">
+
+    <%=render :partial=>"feed_list", :collection=>@feeds%>
+    		
+    <div class="user_links">
+        <div class="pages"><%=pagination_links( @feed_pages,:params=>{:order=>@order} )%></div>
+    </div>
+    
+</div>
+
+ 

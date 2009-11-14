@@ -1,0 +1,28 @@
+
+
+<%
+    vote_type_img_url = ""
+    
+    if who_voted.vote == -1
+        vote_type_img_url = "/images/idisagree.gif"
+    else
+        vote_type_img_url = "/images/iagree.gif"
+    end
+    
+%>
+<div class="saved_by_details_wrapper">
+
+
+<div class="saved_by_details_user_img"><a href="<%=userposts_url(:user_screen_name=>who_voted.user.screen_name)%>"><img alt="<%=who_voted.user.screen_name%>" src="<%=who_voted.user.user_image.small_url%>"/></a></div>
+
+<div class="saved_by_details">
+
+    <div class="screen_name"><a href="<%=userposts_url(:user_screen_name=>who_voted.user.screen_name)%>"><%=truncate(who_voted.user.screen_name,35,"...")%></a>&nbsp;&nbsp;<img src="<%=vote_type_img_url%>" alt="voted"/></div>
+
+    <div>Votado &agrave; <span class="d"><%= date_formatter(who_voted.voted_at) %> </span> atr&aacute;s | <a id="user_options_<%=who_voted.user.id%>" href="javascript:void(0)" onclick="open_user_option('<%=who_voted.user.id%>')">Eu quero...&raquo;</a></div>
+    
+</div>
+
+</div>
+
+<%=user_drop_menu(who_voted.user)%>

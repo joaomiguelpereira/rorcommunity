@@ -1,0 +1,36 @@
+<div class="positive"><div class="great_news">A tua conta com foi criada com sucesso!!</div></div>
+
+<div class="simple_page">
+
+<p class="first" style="font-size: 115%; line-height: 1.6;">
+A tua conta no Blorkut foi criada com sucesso. A partir deste momento podes entrar sempre no Blorkut com a tua identidade <strong>OpenID</strong>!</p>
+
+
+
+<p class="first" style="font-size: 115%; line-height: 1.6;">Os detalhes da tua conta Blorkut s&atilde;o os seguintes:</p>
+
+</div>
+
+
+<table class="summary_table">
+
+	<tr>
+		<td class="title">Identidade OpenId</td>
+		<td><%=@user.open_id_url%></td>
+	</tr>
+	<tr>
+		<td class="title">Nome de utilizador</td>
+		<td><%=@user.screen_name%></td>
+	</tr>
+	<tr>
+		<td class="title">Email</td>
+		<td><%=@user.email%></td>
+	</tr>
+</table>
+
+
+
+
+
+<%=render :partial=>"common/new_user_login_message"%>
+

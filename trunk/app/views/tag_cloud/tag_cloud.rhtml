@@ -1,0 +1,25 @@
+<%=render_front_page_extra_nav("tag_cloud")%>
+
+<div class="big_tag_cloud">
+    
+    <div class="tag_cloud_top_hint">Isto &eacute; uma <strong>n&uacute;vem de tags</strong> - A popularidade reflecte-se pelo tamanho da fonte</div>
+    <div class="tag_cloud_top_ordering">Ordenar por &nbsp;
+    
+    <%if session[:big_tag_cloud_order] == "freq"%><span class="selected">frequ&ecirc;ncia</span><%else%> <a href="<%=tagcloud_url()%>?order=freq">frequ&ecirc;ncia</a><%end%>
+    
+    <%if session[:big_tag_cloud_order] == "alpha"%><span class="selected">ordem alfab&eacute;tica</span><%else%> <a href="<%=tagcloud_url()%>?order=alpha">ordem alfab&eacute;tica</a><%end%>
+    <br/>
+    Ver <%if session[:big_tag_cloud_count] == "20"%><span class="selected">20</span><%else%> <a href="<%=tagcloud_url()%>?count=20">20</a><%end%>...
+    <%if session[:big_tag_cloud_count] == "50"%><span class="selected">50</span><%else%> <a href="<%=tagcloud_url()%>?count=50">50</a><%end%>...
+    <%if session[:big_tag_cloud_count] == "100"%><span class="selected">100</span><%else%> <a href="<%=tagcloud_url()%>?count=100">100</a><%end%>...
+    <%if session[:big_tag_cloud_count] == "all"%><span class="selected">todas</span><%else%> <a href="<%=tagcloud_url()%>?count=all">todas</a><%end%>
+    
+    
+    <br/>  <br/>
+    
+    
+    <div id="tag_cloud_tags_container">    
+        <%=render_all_tags(@tags)%>
+        
+    </div>
+</div>

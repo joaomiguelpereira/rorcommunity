@@ -1,0 +1,3 @@
+page.visual_effect(:switch_off, "login-form")
+#page.replace_html "login-form",""
+page.replace_html "login_top_form_link", link_to_show_top_login_form

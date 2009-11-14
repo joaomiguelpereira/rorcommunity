@@ -1,0 +1,11 @@
+<div>
+    
+    <div class="user_link_details" id="channel_details_<%=feed_list.id%>">
+        <%url = channel_url(:permalink=>feed_list.permalink, :user_screen_name=>feed_list.user_screen_name)%>
+        
+        <div class="user_link_details_title"><a id="title_<%=feed_list.id%>" href="<%=url%>"><%=feed_list.name%></a></div>
+        <div><%=feed_summary(feed_list)%></div>
+        <br/>
+    
+    </div>
+</div>

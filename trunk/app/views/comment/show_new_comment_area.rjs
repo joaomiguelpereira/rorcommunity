@@ -1,0 +1,26 @@
+
+
+
+if @logged
+  page.visual_effect :fade,'no_comments_yet' 
+  new_html = render :partial =>"insert_comment" ,:collection=>[@newCommentInfo]
+  
+  page.insert_html :before, "insert_comment", new_html
+  page.visual_effect :appear, "new_comment_wrapper_"+@newCommentInfo.post_id
+  
+  #new_comment_text_area_
+  page.delay(2) do
+    page["new_comment_text_area_"+@newCommentInfo.post_id].focus()
+    
+  end
+  
+ 
+  page.visual_effect :fade,'insert_comment'
+else
+  #create an alert box
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Queres deixar o teu coment&aacute;rio?",register_url,login_url);
+  
+end
+#page['insert_comment'].hide()

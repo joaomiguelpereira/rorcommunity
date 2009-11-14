@@ -1,0 +1,26 @@
+
+<div id="header-primary" class="menu-single">
+    <ul class="<%=tag_cloud_style_for_secondary_options%>" id="secondary_options_ul">
+	   <li>
+	       <a href="<%=submit_url%>" class="submit">&nbsp;</a>
+	       
+	   
+	   </li>
+	   
+		
+		
+		
+		
+		
+		
+	</ul> 
+	<div id="tag_cloud_header">
+	<%=if is_tag_cloud_visible
+	       render_component_tag_cloud()
+	   end
+	%>
+	
+	</div><!--End tag_cloud_header-->
+	
+	
+</div> <!--End header primary-->

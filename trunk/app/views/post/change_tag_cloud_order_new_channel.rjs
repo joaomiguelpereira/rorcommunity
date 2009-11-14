@@ -1,0 +1,14 @@
+
+
+values = render_linkable_tag_to_add_filter
+page << "the_tags = $H({#{values[1]}})"
+page.replace_html "tag_container_cloud", values[0]
+
+
+
+function_call = ""
+
+function_call = "update_array"
+
+page.call(function_call,values[1])
+

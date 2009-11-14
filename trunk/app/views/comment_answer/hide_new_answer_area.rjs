@@ -1,0 +1,16 @@
+if @logged
+  page.visual_effect :fade, "new_answer_wrapper_"+@comment_id
+
+  
+  page.visual_effect :appear, "answer_to_commnet_link_#{@comment_id}"
+  page.remove("new_answer_wrapper_"+@comment_id)
+  page.remove("ie_little_hack_"+@comment_id)
+  
+ 
+
+else
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Queres deixar o teu coment&aacute;rio?",register_url,login_url);
+  
+end

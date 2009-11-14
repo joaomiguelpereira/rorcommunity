@@ -1,0 +1,16 @@
+#page.alert("yep")
+
+page.replace_html "rows_cointainer", (render :partial=>"user_list_row", :collection=>@users)
+page.replace_html "table_navigation", (pagination_links_ajax( @users_pages ) )
+
+array_string = "";
+#array_string << "'";
+
+@users.each do|user|
+  array_string << "#{user.id};"
+end
+#array_string << "'";
+function_call = ""
+function_call = "auto_select_rows" 
+page.call(function_call,array_string);
+

@@ -1,0 +1,48 @@
+if @not_fan
+  function_call = ""
+  function_call = "show_alert" 
+  page.call(function_call,"Nao e teu fan");
+  return
+end
+if @logged
+  
+
+  #function_call = ""
+  #function_call = "show_alert" 
+  #page.call(function_call,"O #{@fan.screen_name} deixou de pertencer &agrave; tua rede de amigos! </br>Podes rejeita-lo da tua lista de f&atilde;s quando quiseres!");
+  
+  page.visual_effect(:fade, "fan_"+@fan.id.to_s)
+  
+  page.remove("fan_"+@fan.id.to_s)
+  
+  function_call = ""
+  function_call = "clearOpenedMenus" 
+  page.call(function_call);
+  
+  
+  #add to the list of friend
+  
+  
+  
+  #new_html = " <span id=\"fan_#{@fan.id}\"><a class=\"fan_not_selected\" id=\"user_options_#{@fan.id}\" href=\"javascript:void(0)\" onclick=\"open_fan_options(#{@fan.id},'#{@fan.screen_name}')\">#{@fan.screen_name}</a></span>"
+
+  
+  #page.alert(innerHtml)
+  #page.insert_html :before,"user_fans_new", new_html
+  
+  page.remove("user_option_div_#{@fan.id}")
+  
+  #now I need the menu for this fan
+  #page.insert_html :before, "user_fans_new", fan_drop_menu(@user, @fan)
+  
+  #page.replace_html "user_friends", @fan.screen_name 
+  
+  
+  
+else
+
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Vem fazer parte desta comunidade.",register_url,login_url);
+end
+

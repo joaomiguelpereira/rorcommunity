@@ -1,0 +1,15 @@
+
+#page.show "tag_cloud_header"
+
+#new Effect.('id_of_element', {duration:0.5, from:1.0, to:0.7});
+
+#visual_effect(:opacity, "tag_cloud_header", :duration => 0.5, :from =>0.0, :to =>1.0)
+page["secondary_options_ul"].className = "with_tag_cloud"
+
+page.replace_html "tag_cloud_header", render_component(:controller =>"tag_cloud", :action=>"tag_cloud")
+page.visual_effect(:appear, "tag_cloud_header") 
+page.replace_html "show_hide_tag_cloud_link",  link_to_hide_tag_cloud
+
+
+
+#page.new Effect.Highlight('tag_cloud_header',{duration: 5}

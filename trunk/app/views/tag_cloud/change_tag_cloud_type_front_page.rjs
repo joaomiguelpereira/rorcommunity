@@ -1,0 +1,2 @@
+
+page.replace_html 'front-page-more-recent-tags-container', front_page_most_recent_tags

@@ -1,0 +1,114 @@
+/* CSS Document */
+
+
+body {
+	color: #393733;
+	margin: 0;
+	
+	font: 83%/1.4 arial, helvetica, sans-serif;
+	color: #393733;
+	margin: 0;
+	padding: 0 20px;
+	text-align: center;
+	/*background: #fff url(/images/page-back.gif) repeat-x;*/
+	background: #fff url(/images/page-back.gif) repeat-x;
+
+}
+
+#header {
+	width:100%;
+	
+	font-size:150%;
+	
+	text-align:left;
+}
+
+#header-primary {
+	/*background: #CCDEAF;*/
+	text-align:left;
+	width: 100%;
+	font-size:110%;
+	font-weight:bold;
+}
+
+#header-primary.menu-single {
+	/*background: #CCDEAF url(/images/menu-primary.gif) 100% 100% no-repeat;*/
+	background: #CCCCFF;
+	margin-bottom:20px;
+	text-align:left;
+	
+	padding-left:10px;
+	font-weight:bold;
+}
+.image_preview{
+	margin-left:10px;
+	float:left;
+	text-align:left;
+}
+input {
+	line-height: 1;
+}
+
+.form-large {
+    font-size: 100%;
+}
+
+.form-large input {
+    border:solid 1px;
+	padding: 3px 7px !important;
+    background: #FFFADB url(/images/form-back.gif) repeat-x;
+   
+}
+.form-large label {
+	float: none;
+	display: block;
+	font-size: 105%;
+	font-weight: bold;
+	letter-spacing: -0.03em;
+	color: #817A71;
+	margin: 0.7em 0 0.1em 0;
+}
+
+.form_button{
+	font-weight:bold;
+	font-size:120%;	
+	border:solid 1px;	
+	background:#FFFFCC;
+    background: #FFFADB url(/images/form-back_button_big.gif) repeat-x; 
+	padding:3px;
+	margin-left:3px;
+	margin-right::3px;
+	
+}
+.form_button:hover{
+	border:solid 1px;
+	background:#999999;
+	cursor:pointer;	
+	background: #FFFADB url(/images/form-back_button_big_b.gif) repeat-x; 
+	
+}
+
+.warning {
+	margin-top:10px;
+	padding-left:15px;
+	font-size:110%;
+	font-weight:bold;
+	color:#990000;
+	background-image: url(/images/no_confirm.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-color:#CCCCCC;
+}
+
+#croping_img {
+	float:left;
+}
+#previewWrap {
+	float:left;
+}
+.inline {
+	float:left;
+	clear:none;
+}
+
+

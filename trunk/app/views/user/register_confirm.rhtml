@@ -1,0 +1,34 @@
+<h2><%=BaseHelper.get_message("user.register")%> - Passo 2</h2>
+
+<div class="positive"><div class="great_news">Parab&eacute;ns. Est&aacute; quase...</div></div>
+
+<div class="simple_page">
+
+    <p>O teu processo de registo no <%=BaseHelper.get_message("service.name")%> est&aacute; quase conclu&iacute;do. </p>
+
+<p>Enviamos em email para <strong style="font-size: 105%;"><%=@user.email%> </strong>com uma chave de activa&ccedil;&atilde;o de forma a poder-mos concluir o teu registo.</p>
+
+<p>Para continuar com o processo de registo insere a chave de activa&ccedil;&atilde;o em baixo.</p>
+
+<div style="font-size: 95%;">(Em alternativa podes seguir o link que te foi enviado por email)</div>
+
+
+<fieldset style="width:500px">
+    <legend>Activa&ccedil;&atilde;o</legend>
+
+    <%= form_tag(:action => "confirm_registration") %>
+    <div class="form-large">
+        <label for="user_activation_activation_key">Chave de activa&ccedil;&atilde;o</label>
+        <%= text_field 'user_activation', 'activation_key' , 'size' => 45, 'title' => "Chave de activa&ccedil;&atilde;o", 'tabindex'=>1%>
+    </div>
+    
+    <br style="clear:both"/>
+    <div class="fieldset-footer">
+        <%= submit_tag "Continuar", {:class=>"form_big_button", :tabindex=>"2", :title=>"Continuar"}%>
+    </div>
+    <%= end_form_tag -%>
+</fieldset>
+
+</div>
+
+<%=javascript_tag "$('user_activation_activation_key').focus();"%>

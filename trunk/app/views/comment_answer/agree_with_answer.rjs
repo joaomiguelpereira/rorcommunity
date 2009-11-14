@@ -1,0 +1,26 @@
+if @logged
+  
+  page.visual_effect :fade, "answer_agreement_link_"+@answer_id 
+  class_name = "comment_votes"
+  page.delay(1) do
+    
+    page.visual_effect :appear, "answer_agreement_link_"+@answer_id 
+    page.replace_html "answer_agreement_link_"+@answer_id, "<span class=\"agree\" style=\"color:#003300\">Eu concordei com esta resposta</span>"
+    
+    page.replace_html "comments_answer_number_of_votes_"+@answer_id,@votes.to_s+" "+pluralize_votes(@votes)+" "
+    if @votes > 0
+      class_name = "comment_votes_positive"
+    end
+    
+    if @votes < 0
+      class_name = "comment_votes_negative"
+    end
+    page["comments_answer_number_of_votes_"+@answer_id].className = class_name
+    #page.visual_effect :appear,"comments_number_of_votes_"+@comment_id
+  end
+else
+  #create an alert box
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Queres participar e concordar com esta resposta?",register_url,login_url);
+end

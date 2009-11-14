@@ -1,0 +1,24 @@
+<div class="comment-body" style="display:none;" id="new_comment_wrapper_<%=insert_comment.post_id%>">
+                <%=form_remote_tag(:url=>{:controller=>"comment", :action=>"save_new_comment", :id=>insert_comment.post_id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%>               
+                <div class="right-comment-body"><div class="comment-top-tool">&nbsp;</div></div>
+                <div class="comment-info">
+                    
+                 <div class="comment-user-photo"><img width="22" height="22" src="<%=insert_comment.logged_user.user_image.small_url%>" alt="user photo"/></div> 
+                 <div class="commented-at"><%=insert_comment.logged_user.screen_name%> a comentar...</div>
+                 </div> 
+                 
+                 
+                 <div class="comment-content">
+                        
+                        <textarea name="comment" id="new_comment_text_area_<%=insert_comment.post_id%>"wrap="soft" class="new_comment_text_area" rows="5" cols="20"></textarea>
+                        <div class="comment-tip">N&atilde;o &eacute; permitido HTML. Os links s&atilde;o autom&aacute;ticamente detectados se escritos na forma http:// (http://www.google.com, p.ex.)</div>
+                 </div>
+                 
+                
+                <div class="comment-form">
+                   
+                    <%= submit_tag "Gravar coment&aacute;rio", {:class=>"form_small_button", :tabindex=>"3"}%>
+ <input onclick="<%=remote_function( :url=>{:controller=>"comment", :action=>"hide_new_comment_area", :id=>insert_comment.post_id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%>" class="form_small_button" tabindex="2" type="button" title="Cancelar" value="Cancelar" /> 
+                </div>
+                <%=end_form_tag%>
+    </div>

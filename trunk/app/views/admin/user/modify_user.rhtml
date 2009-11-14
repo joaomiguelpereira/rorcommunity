@@ -1,0 +1,21 @@
+<html>
+<head>
+
+<title>Modify</title>
+</head>
+
+<body>
+
+<h1>Modify User</h1>
+
+<% form_tag :action => 'update_user', :id=>@user do %>
+  <%= render :partial => 'form', :locals=> {:context => "modify"} %>
+  <%= submit_tag "Modidy" %>
+<% end %>
+
+<!--, -->
+<%= link_to 'Back', :action => 'list_users' %>
+</body>
+
+</html>
+

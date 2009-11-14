@@ -1,0 +1,15 @@
+<html>
+
+<head>
+<title>Administration</title>
+
+</head>
+<body>
+Administartion</br>
+<%=link_to 'logout', :controller => "admin/login", :action=>"signout"%>
+
+
+<h1>Users</h1>
+<%= link_to "Users Management", :controller=> "admin/user", :action=> "list_users"%>
+</body>
+</html>

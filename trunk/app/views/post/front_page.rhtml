@@ -1,0 +1,162 @@
+<%
+    post_filter = session[:post_filter]
+    filtering_by_tag = ""
+    if !post_filter.nil?
+    
+        filtering_by_tag = render_tag_fp_filtering(post_filter)
+    
+    end
+%>
+
+<%=render_front_page_extra_nav("front_page")%>
+
+<div class="sidebar"> 
+ 
+<div class="profile-right-box" style="margin-top:20px">
+
+<div id="front-page-more-recent-tags-title" class="expandable-title-expanded"><a href="javascript:void(0)" onclick="show_hide('front-page-more-recent-tags')">Tags mais recentes</a></div>
+<div id="front-page-more-recent-tags">
+
+<div id="front-page-more-recent-tags-container">
+    <%=front_page_most_recent_tags%>
+</div>
+
+
+ <div class="user_tags_option">ordenar tags por: 
+ <a <%if session[:tag_order_front_page]==1%> class="selected" <%end%> id="re_order_freq" href="javascript:void(0)" onclick="reorder_tag_cloud('freq')">frequ&ecirc;ncia</a> 
+ <a <%if session[:tag_order_front_page]==2%> class="selected" <%end%> href="javascript:void(0)" id="re_order_alpha" onclick="reorder_tag_cloud('alpha')">ordem alfab&eacute;tica</a></div>
+ <div class="user_tags_option">Mostrar como: 
+ <a <%if session[:tag_cloud_type_front_page]==2%> class="selected" <%end%> id="redo_tag_cloud_as_list" href="javascript:void(0)" onclick="redo_tag_cloud('list')">lista</a> 
+ <a <%if session[:tag_cloud_type_front_page]==1%> class="selected" <%end%> id="redo_tag_cloud_as_cloud" href="javascript:void(0)" onclick="redo_tag_cloud('cloud')">n&uacute;vem</a></div>
+   
+
+</div>
+
+<div id="front-page-popular-links-title" class="expandable-title-expanded"><a href="javascript:void(0)" onclick="show_hide('front-page-popular-links')">Links mais populares</a></div>
+<div id="front-page-popular-links">
+
+<%=render_popular_links%>
+
+</div>
+</div>
+
+teste tes te ete tet
+</div>
+
+                		
+<div class="front-page-filtering">
+
+<%
+    filter = session[:post_filter]
+    active_filter = filter.fp_order 
+%>
+<span class="tool <%if active_filter==1%>selected<%end%>"><%if active_filter!=1%><a href="<%=home_url()%>?order=recent"><%end%>Mais recentes<%if active_filter!=1%></a><%end%></span>
+
+<span class="tool <%if active_filter==2%>selected<%end%>"><%if active_filter!=2%><a href="<%=home_url()%>?order=popular"><%end%>Populares<%if active_filter!=2%></a><%end%></span>
+
+<span class="tool <%if active_filter==3%>selected<%end%>"><%if active_filter!=3%><a href="<%=home_url()%>?order=less_popular"><%end%>Menos populares<%if active_filter!=3%></a><%end%></span>
+
+
+<span class="tool rss"><a href="<%=frontpage_rss_url()%>">RSS</a></span>
+<span class="tool rss second"><a id="personalized_rss_a" href="<%=url_for :action=>"rss_create_new_channel"%>?step=1">Criar feed personalizada</a></span>
+
+
+
+</div>
+<br style="clear:left"/>
+<%if active_filter==2%>
+<%top = session[:front_page_top_stories]%>
+<div class="front-page-filtering">
+<span class="tool <%if top=="24"%>selected<%end%>"><%if top!="24"%> <a href="<%=home_url()%>?order=popular&amp;top=24"> <%end%>Top 24 horas<%if top!="24"%></a><%end%></span>
+
+<span class="tool <%if top=="7"%>selected<%end%>"><%if top!="7"%><a href="<%=home_url()%>?order=popular&amp;top=7"> <%end%>Top 7 dias<%if top!="7"%></a><%end%></span>
+<span class="tool <%if top=="30"%>selected<%end%>"><%if top!="30"%><a href="<%=home_url()%>?order=popular&amp;top=30"> <%end%>Top 30 dias<%if top!="30"%></a><%end%></span>
+<span class="tool <%if top=="365"%>selected<%end%>"><%if top!="365"%><a href="<%=home_url()%>?order=popular&amp;top=365"> <%end%>Top 365 dias<%if top!="365"%></a><%end%></span>
+
+
+</div>
+<%end%>
+<br style="clear:left"/>
+<div class="post-filtering"><%=filtering_by_tag%></div>
+
+<div class="main"> <!--Satrt Main Section-->
+<%=render :partial=>"link_details", :collection=>@posts, :locals=>{:rendering_single=>false, :context=>"front_page"}%>
+		
+		
+<div class="pages"><%=pagination_links( @post_pages)%></div>	
+</div>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+    
+        function open_context_menu(name)  {
+            el = $(name+"_a");
+            el2 = $(name);
+            
+            Position.clone(el,el2);
+            
+            el2.style.width = '230px';
+            el2.style.height = 'auto';
+        
+            new Effect.toggle(el2);
+            
+            if ( el.innerHTML.indexOf("RSS")>-1 )
+                el.innerHTML = "Esconder";
+            else
+                el.innerHTML = "RSS Personalidado";
+            
+            
+            
+        
+             
+            
+        }
+        function redo_tag_cloud(type) {
+             if ($('redo_tag_cloud_as_list').hasClassName('selected'))
+                $('redo_tag_cloud_as_list').removeClassName('selected')
+                    
+             if ( $('redo_tag_cloud_as_cloud').hasClassName('selected'))
+                $('redo_tag_cloud_as_cloud').removeClassName('selected')
+             
+             el = $('redo_tag_cloud_as_'+type);
+                
+            el.className = "selected";
+            new Ajax.Request('/tag_cloud/change_tag_cloud_type_front_page?type='+type, {asynchronous:true, evalScripts:true, onComplete:function(request){hideWaiting()}, onLoading:function(request){showWaiting()}}); return false;
+        }
+        
+        function change_tags_operator() {
+             selected = $('tags_operator').value;
+             window.location = '<%=home_url%>?change_tag_op='+selected;
+        }
+        
+        function reorder_tag_cloud(order) {
+            if ($('re_order_freq').hasClassName('selected'))
+                $('re_order_freq').removeClassName('selected')
+                    
+             if ( $('re_order_alpha').hasClassName('selected'))
+                $('re_order_alpha').removeClassName('selected')
+             
+             el = $('re_order_'+order);
+                
+            el.className = "selected";
+            
+            new Ajax.Request('/tag_cloud/change_tag_cloud_type_front_page?order='+order, {asynchronous:true, evalScripts:true, onComplete:function(request){hideWaiting()}, onLoading:function(request){showWaiting()}}); return false;
+            
+        }
+        
+        function show_hide(name) {
+            
+            if ($(name).visible()) {
+                $(name+'-title').className = 'expandable-title-colapsed';
+                new Effect.Fade($(name));
+            } else {
+                new Effect.Appear($(name));
+                $(name+'-title').className = 'expandable-title-expanded';
+            }
+            
+            
+        }             
+    //]]>
+</script>
+

@@ -1,0 +1,36 @@
+if !@has_errors
+  page.redirect_to("account_created?user_id=#{@user.id}")
+  
+end
+
+if !@screen_name_error.nil?
+  
+  
+  
+  page.replace_html "br_for_screen_name_errors", "<br/>"
+    
+  page.replace_html "screen_name_errors", @screen_name_error
+  
+  
+  page.visual_effect :appear, "screen_name_errors"
+  
+  function_call = ""
+  function_call = "enableAll" 
+  page.call(function_call);
+  
+end
+
+
+if !@email_error.nil?
+  
+  page.replace_html "br_for_email_errors", "<br/>"
+  
+  page.replace_html "email_errors", @email_error
+  page.visual_effect :appear, "email_errors"
+  
+  
+  function_call = ""
+  function_call = "enableAll" 
+  page.call(function_call);
+  
+end

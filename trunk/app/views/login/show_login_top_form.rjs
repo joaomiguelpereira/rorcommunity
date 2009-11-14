@@ -1,0 +1,17 @@
+#page.show "login-form"
+#page.replace_html "login-form",render_component(:controller =>"login", :action=>"login_top_form") 
+#page.replace_html "login-form",render_component(:controller =>"login", :action=>"login_top_form") 
+page.replace_html "login-form",(render :partial => "login/login_top_form")
+page.replace_html "login_top_form_link", link_to_hide_top_login_form
+
+page.visual_effect(:appear,"login-form")
+
+#page.delay(1) do
+#    page["user_email"].show()
+#end
+
+page.delay(1) do
+    page["user_email"].focus()
+end
+#page << "var textF = $('user_email');"
+#page <<  "textF.focus()"

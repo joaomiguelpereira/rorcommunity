@@ -1,0 +1,74 @@
+<%=render_front_page_extra_nav("list_users")%>
+
+
+<div class="sidebar">
+
+    <div class="profile-right-box" style="margin-top:20px">
+        
+bla bla bla<br/>bla bla bla<br/>bla bla bla<br/>bla bla bla<br/>
+
+
+    </div>
+</div> <!--end sidebar-->
+
+<div>Esta &eacute; a comunidade <span style="color:red">fav</span>.<span style="color:#FF9900">oritus</span>.<span style="color:green">com</span>. A lista de membros desta comunidade est&aacute; aqui.</div>
+<div class="front-page-filtering">
+ 
+<%user_ordering = session[:user_list_order]%>
+
+<span class="tool <%if user_ordering==1%>selected<%end%>"><%if user_ordering!=1%><a href="<%=users_url()%>?order=most_active"><%end%>Mais activos<%if user_ordering!=1%></a><%end%></span>
+
+<span class="tool <%if user_ordering==2%>selected<%end%>"><%if user_ordering!=2%><a href="<%=users_url()%>?order=most_popular"><%end%>Mais populares<%if user_ordering!=2%></a><%end%></span>
+
+<span class="tool <%if user_ordering==4%>selected<%end%>"><%if user_ordering!=4%><a href="<%=users_url()%>?order=oldest"><%end%>Mais recentes<%if user_ordering!=4%></a><%end%></span>
+
+<span class="tool <%if user_ordering==3%>selected<%end%>"><%if user_ordering!=3%><a href="<%=users_url()%>?order=most_recent"><%end%>Mais antigos<%if user_ordering!=3%></a><%end%></span>
+
+
+</div>
+<br style="clear:left"/>
+<div class="main-user-list"> <!--start Main Section-->
+   
+    <%=render :partial=>"compact_user_details", :collection=>@users%>
+   
+<div class="user_links"><div class="pages"><%=pagination_links( @users_pages)%></div></div>
+
+
+</div>
+ <script type="text/javascript">
+    //<![CDATA[
+
+    var visible_user_menu = null;
+    var visible_user_menu_link = null;
+    function open_user_option(theId) {
+        
+        el2 = $('user_option_div_'+theId);
+        el = $('user_options_'+theId);
+        
+        Position.clone(el,el2);
+         
+        
+        el2.style.width = '100px';
+        el2.style.height = 'auto';
+        
+        new Effect.toggle(el2);
+        
+        if ( el.innerHTML.indexOf("Op")>-1 )
+            el.innerHTML = "Esconder";
+        else
+            el.innerHTML = "Op&ccedil;&otilde;es &raquo;";
+            
+        if ( visible_user_menu != null && visible_user_menu.id != el2.id) { 
+            new Effect.Fade(visible_user_menu);
+            visible_user_menu_link.innerHTML = "Op&ccedil;&otilde;es &raquo;";
+        }
+        visible_user_menu = el2;
+        visible_user_menu_link = el;
+        
+        
+    }
+    
+    //]]>
+
+</script>
+

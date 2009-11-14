@@ -1,0 +1,225 @@
+.overlay_alphacube {
+
+	background-color: #FFFFFF;
+	
+
+	filter:alpha(opacity=40);
+	-moz-opacity: 0.4;
+	opacity: 0.4;
+	
+}
+
+.alphacube_nw {
+  /*background: transparent url(alphacube/left-top.gif) no-repeat 0 0;*/
+    	
+  	/*width:10px;
+  	height:23px;
+	margin-top:0px;*/
+	border-left: solid 1px #CCCCCC;	
+	border-top: solid 1px #CCCCCC;	
+	background:#f6f6f6;
+	
+}
+
+.alphacube_n {
+  /*background:  url(alphacube/top-middle.gif) repeat-x 0 0;*/
+  background:#f6f6f6;
+  border-top: solid 1px #CCCCCC;	
+  
+  		
+  height:22px;
+  
+}
+
+.alphacube_ne {
+  background: transparent url(alphacube/right-top.gif) no-repeat 0 0;			
+  width:10px;	  
+  height:23px;
+}
+
+.alphacube_w {
+ /*background: transparent url(alphacube/frame-left.gif) repeat-y top left;	*/	
+ 	background:#fff;
+	border-left: solid 1px #CCCCCC;		
+  	width:7px;
+}
+
+.alphacube_e {
+  background: transparent url(alphacube/frame-right.gif) repeat-y top right;			
+  width:7px;	  
+}
+
+.alphacube_sw {
+  background: transparent url(alphacube/bottom-left-c.gif) no-repeat 0 0;			
+  width:7px;
+  height:7px;
+}
+
+.alphacube_s {
+  background: transparent url(alphacube/bottom-middle.gif) repeat-x 0 0;			
+  height:7px;
+}
+
+.alphacube_se, .alphacube_sizer  {
+  background: transparent url(alphacube/bottom-right-c.gif) no-repeat 0 0;			
+  width:7px;
+  height:7px;
+}
+
+.alphacube_sizer {
+	cursor:se-resize;	
+}
+
+.alphacube_close {
+	width: 15px;
+	height: 15px;
+	background: transparent url(alphacube/button-close-focus.gif) no-repeat 0 0;			
+	position:absolute;
+	top:4px;
+	right:11px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+
+
+.alphacube_minimize {
+	width: 23px;
+	height: 23px;
+	background: transparent url(alphacube/button-min-focus.gif) no-repeat 0 0;			
+	position:absolute;
+	top:0px;
+	right:55px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.alphacube_maximize {
+	width: 23px;
+	height: 23px;
+	background: transparent url(alphacube/button-max-focus.gif) no-repeat 0 0;			
+	position:absolute;
+	top:0px;
+	right:33px;
+	cursor:pointer;
+	z-index:1000;
+}
+
+.alphacube_title {
+	float:left;
+	height:14px;
+	font-size:12px;
+	text-align:left;
+	margin-top:0px;
+	width:100%;
+	color:#123456;
+}
+
+.alphacube_title .forbidden {
+	
+	
+	background: transparent url(alphacube/exclamation.gif) no-repeat 0 0;	
+	padding-left:18px;
+	padding-top:1px;
+}
+
+.alphacube_title .info {
+	
+	
+	background: transparent url(alphacube/information.gif) no-repeat 0 0;	
+	padding-left:18px;
+	padding-top:1px;
+}
+
+.alphacube_title .warn {
+	
+	
+	background: transparent url(alphacube/bullet_error.gif) no-repeat 0 0;	
+	padding-left:18px;
+	padding-top:1px;
+}
+
+.alphacube_content {
+	overflow:auto;
+	color: #000;
+	/*font-family: Tahoma, Arial, sans-serif;
+  	font: 12px arial;*/
+	font-size:110%;
+	background:#fff;
+	z-index:1000;
+		
+}
+
+.alphacube_content a {
+	font-size:110%;
+	font-weight:bold;
+}	
+
+.alphacube_content .small_close {
+	width:100%;
+	text-align:right;
+}
+.alphacube_content .small_close a {
+	font-size:70%;
+	font-weight:normal;
+}
+/* For alert/confirm dialog */
+.alphacube_window {
+	border:1px solid #F00;	
+	background: #FFF;
+	padding:20px;
+	margin-left:auto;
+	margin-right:auto;
+	width:400px;
+
+}
+
+.alphacube_message {
+  /*font: 12px arial;*/
+  text-align:center;
+	width:100%;
+	padding-bottom:10px;
+	
+}
+
+.alphacube_buttons {
+	text-align:center;
+	width:100%;
+	
+}
+
+.alphacube_buttons input {
+	width:10%;
+	margin:10px;
+ 
+}
+.ok_button {
+	border:solid 1px;
+	font-size:120%;
+   margin-top:7px;
+    margin-bottom:7px;
+    padding:5px;
+    font-weight:bold;
+    background: #FFFADB url(/images/form-back_button.gif) repeat-x;    
+}
+.ok_button:hover {
+    background: #FFFADB url(/images/form-back_button_b.gif) repeat-x;    
+}
+
+.alphacube_progress {
+	float:left;
+	margin:auto;
+	text-align:center;
+	width:100%;
+	height:16px;
+	background: #FFF url('alert/progress.gif') no-repeat center center
+}
+
+.alphacube_wired_frame {
+	background: #FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;	
+}
+
+

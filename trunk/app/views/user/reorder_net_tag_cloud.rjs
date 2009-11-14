@@ -1,0 +1,2 @@
+
+page.replace_html 'user_friends_tags_container', render_user_friend_tags(@user)

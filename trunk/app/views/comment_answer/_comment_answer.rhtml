@@ -1,0 +1,39 @@
+<div class="<%=cycle("comment-answer-body-a","comment-answer-body")%>" id="comment_answer_boby_<%=comment_answer.id%>">
+                <div class="right-comment-answer-body"><div class="comment-top-tool"><span class="<%=render_html_class(comment_answer.votes)%>" id="comments_answer_number_of_votes_<%=comment_answer.id%>"><%=comment_answer.votes%> <%=pluralize_votes(comment_answer.votes)%> </span>| <a id="comment_answer_content_show_hide_text_<%=comment_answer.id%>" onclick="hide_answer('<%=comment_answer.id%>')" href="javascript:void(0)">Esconder resposta</a></div></div>
+                <div class="comment-info">
+                    
+                 <div class="comment-user-photo"><img width="22" height="22" src="<%=comment_answer.user.user_image.small_url%>" alt="<%=comment_answer.user.screen_name%>"/></div> 
+                 <div class="commented-at">respondido por <a title="<%=comment_answer.user.screen_name%>" href="<%=user_url(:user_screen_name=>comment_answer.user.screen_name)%>"><span><%=h(comment_answer.user.screen_name)%></span></a> &agrave;&nbsp;
+            <span class="d"><%= date_formatter(comment_answer.created_at) %></span> atr&aacute;s <%=render_user_home_page_url(comment_answer.user.website)%></div>
+                 </div> 
+                 
+                 
+                 <div class="comment-content" id="comment_answer_content_<%=comment_answer.id%>"><%=(h(comment_answer.answer)).gsub(/\n/, '<br />').gsub(/(http:\/\/[a-zA-Z\/.?;%]+)/, '<a rel=\"nofollow\" target=\"_blank\" href="\1">\1</a>')%>
+                 </div>
+                
+                 
+                <div class="comment-bottom"  id="comment_answer_bottom_<%=comment_answer.id%>">
+                <div class="comment-tool"> 
+                <%if session[:logged_user]%>
+                    <%answer_vote = comment_answer.user_vote(session[:logged_user])%>
+                    <%unless answer_vote.nil?%>
+                        <%if answer_vote.vote == 1%>
+                            <span class="agree" style="color:#003300">Eu concordei com esta resposta &agrave; <%= date_formatter(answer_vote.voted_at) %> atr&aacute;s</span> 
+                        <%else%>
+                            <span class="disagree" style="color:#990000">Eu n&atilde;o concordei com esta resposta &agrave; <%= date_formatter(answer_vote.voted_at) %> atr&aacute;s</span>
+                        <%end%>
+                    <%else%>
+                    <span id="answer_agreement_link_<%=comment_answer.id%>"><%=link_to_remote( "<span class=\"agree\">concordo</span>", :url=>{:controller=>"comment_answer", :action=>"agree_with_answer", :id=>comment_answer.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%>  | <%=link_to_remote( "<span class=\"disagree\">n&atilde;o concordo</span>", :url=>{:controller=>"comment_answer", :action=>"disagree_with_answer", :id=>comment_answer.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%></span>
+                    
+                    <%end%>
+                <%else%>
+                    <span id="answer_agreement_link_<%=comment_answer.id%>"><%=link_to_remote( "<span class=\"agree\">concordo</span>", :url=>{:controller=>"comment_answer", :action=>"agree_with_answer", :id=>comment_answer.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%>  | <%=link_to_remote( "<span class=\"disagree\">n&atilde;o concordo</span>", :url=>{:controller=>"comment_answer", :action=>"disagree_with_answer", :id=>comment_answer.id},:loading=>"showWaiting()",:complete=>"hideWaiting()")%></span>
+                <%end%>
+                
+                
+                    
+                </div>
+
+                </div>
+    </div>
+

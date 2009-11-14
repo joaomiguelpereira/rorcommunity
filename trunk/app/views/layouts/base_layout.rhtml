@@ -1,0 +1,131 @@
+ <% selected_menu %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!--Start Head-->
+    <head>
+   
+        <title>community / Videos</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><!--Link for CSSs -->
+        <style type="text/css" media="all">@import "/stylesheets/main.css";</style>
+        <style type="text/css" media="all">@import "/stylesheets/windows/default.css";</style>
+        <style type="text/css" media="all">@import "/stylesheets/windows/alert.css";</style>
+        <style type="text/css" media="all">@import "/stylesheets/windows/alphacube.css";</style>
+        <!--[if lte IE 6]><style type="text/css" media="all">@import "/stylesheets/ie6.css";</style><![endif]--><!--[if gt IE 6]><style type="text/css" media="all">@import "/stylesheets/ie7.css";</style><![endif]-->
+        <%= javascript_include_tag "prototype" %>
+        <%= javascript_include_tag "effects" %>
+        <%= javascript_include_tag "dojo" %>
+        <%= javascript_include_tag "window" %>
+        <%= javascript_include_tag "jscripts" %>
+
+        <%=include_scripts%>
+        <%=include_css%>
+    </head><!--End head-->
+
+    <body>
+       
+       <% if session[:logged_user]%>
+        <%=drop_menu("user_options")%>
+            <%=drop_menu_option((url_for :controller=> 'login', :action=>'logout'),"Logout")%>
+            <%=drop_menu_option((url_for :controller=> 'user', :action=>'view_public_profile_by_id', :user_id=>session[:logged_user]),"O meu perfil")%>
+        <%=end_drop_menu%>
+        <%end%>
+        <div id="server_processing_dialog_div2" style="display:none">A processar...</div>
+        <div id="mouse_trail" style="display:none">A processar...</div>
+
+        <div id="container">
+            <div id="login-form" style="display:none"></div>
+           
+         <div id="header">
+            <h1><%=link_to("index",home_url)%></h1>
+            <div class="top_header">*</div>
+<!--start side-->
+             <div class="side-header">
+                <%unless session[:logged_user]%>
+                    <span id="register_top_link">
+                        <%= link_to BaseHelper.get_message("user.join"), register_url, {:class=>"arrow_link"}%>
+        
+                    </span>
+                <%else%>
+                    <span class="top_user_option">
+                       <%screen_name= User.get_user_name(session[:logged_user])%>
+                        <b>viva <%=screen_name%>!</b>  
+        
+        	           <span>
+	                       <a class="expandable_link" href="javascript:void(0)" onclick="drop_menu.open_drop_menu('user_options',this)">Op&ccedil;&otilde;es</a>  
+	                   </span>
+	                   
+
+                </span>
+                <%end%>
+    
+	           <span id="login_top_form_link">
+	               <%=link_to_show_top_login_form%>
+	           </span>
+	           
+
+		          <input type="text" name="txt_search" id="txt_search" value="pesquisar" maxlength="30" onkeydown="search.do_keydown(event)" onfocus="search.on_focus()" onblur="search.on_blur()"/>
+              
+		          <a href="javascript:void(0)" onclick="start_searching()">pesquisar</a>
+
+	          <div id="side-header-secondary" style="font-weight:bold;"><a href="<%=submit_url%>" class="arrow_link">Partilha o que interessa</a></div>		
+        </div><!--End side options-->
+
+            
+
+            <%render_component(:controller =>"header", :action=>"secondary_options")%>
+            
+       
+        
+           </div>
+
+                
+            <div class="top_ad_image"></div>
+            
+            
+
+
+            <div id="contents"><!--Start Contents Section-->
+               
+                <div id="wrapper"><!--Start Contents Wrapper Section-->
+                   
+                    <% if flash[:notice] %>
+                        <div class="warning">
+                            <div><%= flash[:notice] %></div>
+                        </div>
+                        <%
+                            #stupid IE needs this
+                                            flash[:notice] = nil
+                                        end%>
+
+                        <% if flash[:message_success] %>
+                            <div class="positive">
+                                <div><%= flash[:message_success] %></div>
+                            </div>
+                            <%flash[:message_success] = nil
+                         end%>
+         
+         
+                 
+         
+                             
+                    		
+                            <%= @content_for_layout %>
+                            
+                             </div>
+                            <!--End Wrapper-->
+                            
+                            
+                            
+                     </div>
+        </div>
+        
+        
+       
+	                   
+	                
+    <form action="/search" method="post" id="form_search">
+	   <input type="hidden" name="search_keywords" id="search_keywords"/>
+    </form>
+	                   
+    </body>
+</html>

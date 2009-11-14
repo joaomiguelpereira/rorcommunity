@@ -1,0 +1,75 @@
+
+<%=javascript_include_tag "cropper/lib/prototype"%>
+<%=javascript_include_tag "cropper/lib/scriptaculous"%>
+<%=javascript_include_tag "cropper/cropper"%>
+
+
+    
+<div id="header-primary">
+    Passo 2 - Recortar imagem
+</div>
+
+<br style="clear:both"/>
+
+<div id="croping_img">
+<div style="font-weight:bold;font-size:80%; text-align:center">Imagen Original</div>
+<img src="<%=@user.user_image.full_temp_url%>" id="crop_image" alt="Imagem a recortar"/>
+
+<script type="text/javascript" language="javascript">
+Event.observe( window, 'load', function() {
+		new Cropper.ImgWithPreview(
+			'crop_image',
+			{
+				previewWrap: 'previewWrap',
+				minWidth: 96,
+				minHeight: 96,
+				
+				ratioDim: { x: 10, y: 10},
+				onEndCrop: onEndCrop
+			}
+		);
+	} );	
+
+	   function onEndCrop( coords, dimensions ) {
+	       $( 'crop_info_x1' ).value = coords.x1;
+	       $( 'crop_info_y1' ).value = coords.y1;
+
+	       $( 'crop_info_width' ).value = dimensions.width;
+	       $( 'crop_info_height' ).value = dimensions.height;
+	       
+	       /*$( 'x2' ).value = coords.x2;
+	       $( 'y2' ).value = coords.y2;
+	       $( 'width' ).value = dimensions.width;
+	       $( 'height' ).value = dimensions.height;*/
+        }
+
+	
+</script>
+</div>
+
+
+<div style="font-weight:bold;font-size:80%; text-align:center;float:left;margin-left:20px">Resultado final
+<div id="previewWrap"></div>
+</div>
+
+<br style="clear:both"/>
+<br style="clear:both"/>
+<div style="text-align:center">
+        <div class="inline">
+            <input type="button" value="Cancelar" class="form_button" title="Cancelar"/ onclick="window.close()">
+        </div>
+        
+       
+        <div class="inline">
+            <%= form_tag(:controller=>"user_image", :action => "crop_and_save") %>
+                <%=hidden_field "crop_info", "x1"%>
+                <%=hidden_field "crop_info", "y1"%>
+                <%=hidden_field "crop_info", "width"%>
+                <%=hidden_field "crop_info", "height"%>
+                
+                <%= submit_tag "Concluir", {:class=>"form_button", :tabindex=>"2", :title=>"Concluir"}%>
+            <%= end_form_tag -%>
+        </div>
+</div>
+
+

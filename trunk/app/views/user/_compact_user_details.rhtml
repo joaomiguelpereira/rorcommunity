@@ -1,0 +1,32 @@
+
+<%n_links = Post.get_count_submited_for_user(compact_user_details.id)%>
+<%rank = compact_user_details.rank%>
+<%if rank.nil?
+	rank = 0
+end
+%>
+<div class="saved_by_details_wrapper smaller">
+
+
+<div class="saved_by_details_user_img">
+    <a title="Rank: <%=rank%>, &uacute;ltimo post, coment&aacute;rio ou voto &agrave; <%=date_formatter(compact_user_details.last_activity)%> atr&aacute;s" href="<%=userposts_url(:user_screen_name=>compact_user_details.screen_name)%>"><img alt="<%=compact_user_details.screen_name%>" src="<%=render_small_user_image(compact_user_details.user_image)%>"/></a>
+</div>
+
+<div class="saved_by_details">
+
+    
+    <div class="screen_name"><a title="Rank: <%=rank%>, &uacute;ltimo post, coment&aacute;rio ou voto &agrave; <%=date_formatter(compact_user_details.last_activity)%> atr&aacute;s" href="<%=user_url(:user_screen_name=>compact_user_details.screen_name)%>"><%=truncate(compact_user_details.screen_name,35,"...")%></a></div>
+    <div><a title="Rank: <%=rank%>, &uacute;ltimo post, coment&aacute;rio ou voto &agrave; <%=date_formatter(compact_user_details.last_activity)%> atr&aacute;s" href="<%=userposts_url(:user_screen_name=>compact_user_details.screen_name)%>"><%=n_links%> <%=pluralize_links(n_links)%></a> | <a title="Rank: <%=rank%>, &uacute;ltimo post, coment&aacute;rio ou voto &agrave; <%=date_formatter(compact_user_details.last_activity)%> atr&aacute;s" href="<%=usernetwork_url(:user_screen_name=>compact_user_details.screen_name)%>">rede: <%=UserFriends.count_friends(compact_user_details.id)%></a> | <a id="user_options_<%=compact_user_details.id%>" href="javascript:void(0)" onclick="open_user_option('<%=compact_user_details.id%>')">Op&ccedil;&otilde;es &raquo;</a></div>
+   
+    
+    <div>Membro desde <span class="d"><%= to_day_month_abbr(compact_user_details.activated_at) %></span>&nbsp;</div>
+
+    
+    
+</div><!--saved_by_details-->
+
+
+
+</div>
+
+<%=user_drop_menu(compact_user_details)%>

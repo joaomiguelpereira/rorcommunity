@@ -1,0 +1,27 @@
+unless @saved
+   #page.alert("O coment&aacute;rio n&atilde;o pode ser vazio!!")
+  # page.alert("O coment&aacute;rio n&atilde;o pode ser vazio!!")
+  function_call = ""
+  function_call = "show_alert" 
+  page.call(function_call,"O coment&aacute;rio n&atilde;o pode ser vazio!!");
+  return
+   
+end
+
+if @logged
+  "number_of_comments_"+@post_id
+  #page.alert(@post_comment)
+  page.visual_effect :fade, "new_comment_wrapper_"+@post_id
+  #remove element
+  page.remove "new_comment_wrapper_"+@post_id
+  page.replace_html "number_of_comments_"+@post_id,@number_of_comments.to_s+" "+pluralize_comments(@number_of_comments)
+  
+  new_html = render :partial =>"post_comment" ,:collection=>[@post_comment]
+  page.insert_html :before, "insert_comment", new_html
+  page.visual_effect :appear,'insert_comment'
+else
+  function_call = ""
+  function_call = "show_logon_tooltip" 
+  page.call(function_call,"Queres deixar o teu coment&aacute;rio?",register_url,login_url);
+  
+end

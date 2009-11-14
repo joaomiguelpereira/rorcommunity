@@ -1,0 +1,27 @@
+
+
+<%
+    submited_text = "Submetido"
+    
+    if who_saved.original=="1"
+        submited_text = "Submetido"
+    else
+        submited_text = "Gravado"
+    end 
+%>
+
+<div class="saved_by_details_wrapper">
+
+
+<div class="saved_by_details_user_img"><a href="<%=userposts_url(:user_screen_name=>who_saved.user.screen_name)%>"><img alt="<%=who_saved.user.screen_name%>" src="<%=who_saved.user.user_image.small_url%>"/></a></div>
+
+<div class="saved_by_details">
+
+    <div class="screen_name"><a href="<%=userposts_url(:user_screen_name=>who_saved.user.screen_name)%>"><%=truncate(who_saved.user.screen_name,35,"...")%></a></div>
+
+    <div><%=submited_text%> &agrave; <span class="d"><%= date_formatter(who_saved.created_at) %> </span> atr&aacute;s <%if who_saved.original=="1"%><img src="/images/first_submited.gif" alt="submetido inicialmente por"/><%end%>| <a id="user_options_<%=who_saved.user.id%>" href="javascript:void(0)" onclick="open_user_option('<%=who_saved.user.id%>')">Eu quero...&raquo;</a></div>
+    
+</div>
+
+</div>
+<%=user_drop_menu(who_saved.user)%>

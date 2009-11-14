@@ -1,0 +1,62 @@
+
+<div id="dialog-wrapper" style="text-align:left; font-size:80%">
+    
+    <%if session[:logged_user]%>
+    <div class="table_extra_commands">mostrar <a id="table_extra_filter_all" class="selected" href="javascript:void(0)" onclick="users_table.swap_filter(this)">todos</a>&nbsp;<a href="javascript:void(0)" onclick="users_table.swap_filter(this)" id="table_extra_filter_network">minha rede</a></div>
+    <%end%>
+    <div class="table_extra_commands"><a id="table_extra_command_select_all" href="javascript:void(0)" onclick="users_table.select_all()">seleccionar todos</a> <a id="table_extra_command_select_all" href="javascript:void(0)" onclick="users_table.select_none()">seleccionar nenhum</a></div>
+    <div id="user_list_container">
+        <span style="line-height:3px;">&nbsp;</span>
+        <!--Header-->
+        <div id="table_header">
+
+
+            <div>
+
+                <ul>
+                    <li id="cell_header_name" class="orderable_table_header_cell_up">
+        
+                        <a style="width:120px;padding-left:30px;" href="javascript:void(0)" onclick="users_table.order_by(this)" title="Ordenar por nome">Nome</a>
+              
+                    </li>
+                    <li id="cell_header_links">
+                        <a style="width:40px;padding-left:15px;" href="javascript:void(0)" onclick="" title="Ordenar por numero de links">Links</a>
+           
+                    </li>
+                        
+                    <li id="cell_header_network">
+                        <a style="width:40px;padding-left:15px;" href="javascript:void(0)" onclick="" title="Ordenar por numero de amigos na rede">Rede</a>
+            
+                    </li>
+                    <li id="cell_header_rank">
+                        <a style="width:40px;padding-left:15px;" href="javascript:void(0)" onclick="users_table.order_by(this)" title="Ordenar por ranking">Rank</a>
+            
+                    </li>
+                    
+                    <li id="cell_header_date">
+                        <a style="width:85px;padding-left:15px;" href="javascript:void(0)" onclick="users_table.order_by(this)" title="Ordenar por data de registo">Membro desde</a>
+           
+                    </li>
+
+
+                </ul>
+  
+          
+            </div> 
+
+        </div><!--Table header-->
+        <div id="rows_cointainer">
+            <%=render :partial=>"user_list_row", :collection=>@users%>
+        </div>
+        
+        <div id="table_navigation" class="pages table_navigation_bottom"><%=pagination_links_ajax( @users_pages )%></div>
+        <div class="table_navigation_bottom">&nbsp;</div>        
+        <!--<div class="table_navigation_bottom">&nbsp;<span><a href="">&lt;&lt; Anterior</a> <a href="">1</a> <a href="">2</a> ... <a href="">Pr&oacute;xima &gt;&gt;</a></span></div>-->
+        <!--<div class="table_navigation_bottom">&nbsp;<span><a href="">&lt;&lt; Anterior</a> <a href="">1</a> <a href="">2</a> ... <a href="">Pr&oacute;xima &gt;&gt;</a></span></div>-->
+    </div>  
+    <div id="dialog_bottom_options"><a href="javascript:void(0)" onclick="close_dialog()">Fechar</a></div>
+</div>
+
+
+
+

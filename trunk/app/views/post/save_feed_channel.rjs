@@ -1,0 +1,17 @@
+
+if @error.size > 0
+  page.visual_effect "Appear","errors_area"
+  
+  @error.each do |error|
+   page.visual_effect "Appear","#{error[:id]}"
+  
+   page.replace_html error[:id],error[:msg]
+  end
+  
+  
+else
+   
+  
+  page.redirect_to(url_for(:action=>"rss_create_new_channel", :feed_id=>@user_channel.id.to_s))
+  
+end

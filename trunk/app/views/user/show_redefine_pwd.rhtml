@@ -1,0 +1,33 @@
+
+<h2>Nova password</h2>
+
+<div class="simple_page">
+
+    <p>Vamos definir uma nova password para o utilizador com email
+        <strong style="font-size: 105%;"><%= @user.email %></strong>?
+    </p>
+    <%= form_tag(:action => "update_password", :id=>@user.id) %>
+    <fieldset style="width:500px">
+        <legend>Nova password</legend>
+        <div class="form-large">
+            <div class="inline">
+                <label for="user_password"><%= BaseHelper.get_message("login.login.label.password") %></label>
+                <%= password_field 'user', 'password' , 'size' => 20, 'title' => BaseHelper.get_message("login.login.label.password"), 'tabindex'=>4 %>
+            </div>
+
+            <div class="inline">
+                <label for="user_password_confirmation"><%= BaseHelper.get_message("login.login.label.password.confirm") %></label>
+                <%= password_field 'user', 'password_confirmation' , 'size' => 20, 'title' => BaseHelper.get_message("login.login.label.password.confirm"), 'tabindex'=>5 %>
+            </div><!--class="inline"-->
+            
+            <span class="form-tip"><%= BaseHelper.get_message("register.password_tip") %>
+            </span><%= error_for @user, 'password' %>
+        </div>
+
+        <br style="clear:both"/>
+        <div class="fieldset-footer"><%= submit_tag "Continuar", {:class=>"form_big_button", :tabindex=>"2", :title=>"Continuar"} %></div><%= end_form_tag -%>
+    </fieldset>
+    <%= end_form_tag -%>
+</div>
+
+<%= javascript_tag "$('user_password').focus();" %>

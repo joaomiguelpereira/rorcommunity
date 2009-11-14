@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--Start Head-->
+<head>
+    <title>Alterar imagem</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--Link for CSSs -->
+    <style type="text/css" media="all">@import "/stylesheets/small_window.css";</style>
+
+
+</head> <!--End head-->
+
+<body>
+            <%if flash[:notice]%>
+                <div class="warning" style="text-align:left;"><div><%=flash[:notice]%></div></div>
+            <%
+            #stupid IE needs this
+                flash[:notice] = nil
+            end
+            %>
+            
+            <%if flash[:message_success]%>
+                <div class="positive"><div><%=flash[:message_success]%></div></div>
+            <%
+            #stupid IE needs this
+                flash[:message_success] = nil
+            end
+            %>
+            
+<div id="upload_photo_wrapper">
+<div id="header">Alterar imagem</div>
+<%= @content_for_layout%>
+</div>
+
+</body>
+
+</html>
