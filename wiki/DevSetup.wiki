@@ -10,6 +10,8 @@
    * Install OpenId supoort for ruby http://github.com/rails/open_id_authentication
    * Install Microformats plugin support http://mofo.rubyforge.org/
 
+You can also install RadRails for your IDE http://www.radrails.org/
+
 
 == Just start your app==
 
