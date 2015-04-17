@@ -1,0 +1,1 @@
+This is a old project I made some years ago to learn ruby on rails.
